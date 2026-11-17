@@ -2,15 +2,21 @@
 
 import { forwardRef, useId } from "react";
 import type { InputHTMLAttributes } from "react";
+import { cn } from "@/app/lib/utilitarios";
+import { Rotulo } from "@/componentes/ui/rotulo";
+import { Mensagem } from "@/componentes/ui/mensagem";
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   rotulo: string;
   erro?: string;
   dica?: string;
+  obrigatorio?: boolean;
 };
 
+// Campo de entrada completo: rótulo, input, dica e mensagem de erro.
+// O forwardRef é necessário para funcionar com React Hook Form.
 export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
-  { rotulo, erro, dica, id, className, ...resto },
+  { rotulo, erro, dica, obrigatorio, id, className, ...resto },
   ref,
 ) {
   const idGerado = useId();
@@ -18,49 +24,47 @@ export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
   const idErro = `${idCampo}-erro`;
   const idDica = `${idCampo}-dica`;
 
+  // Liga o input aos textos auxiliares para o leitor de tela
   const descritoPor = [erro ? idErro : null, dica ? idDica : null]
     .filter(Boolean)
     .join(" ");
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label
-        htmlFor={idCampo}
-        className="text-sm font-medium text-slate-700 dark:text-slate-300"
-      >
+      <Rotulo htmlFor={idCampo} obrigatorio={obrigatorio}>
         {rotulo}
-      </label>
+      </Rotulo>
 
       <input
         ref={ref}
         id={idCampo}
         aria-invalid={erro ? true : undefined}
         aria-describedby={descritoPor || undefined}
-        className={[
-          "w-full rounded-lg border px-3 py-2 text-sm outline-none transition",
-          "bg-white text-slate-900 placeholder:text-slate-400",
-          "dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500",
-          "focus:ring-2 focus:ring-offset-0",
+        className={cn(
+          "h-10 w-full rounded-lg border bg-background px-3 text-sm text-foreground",
+          "placeholder:text-muted-foreground",
+          "transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          "disabled:cursor-not-allowed disabled:opacity-60",
           erro
-            ? "border-red-500 focus:border-red-500 focus:ring-red-200 dark:focus:ring-red-900"
-            : "border-slate-300 focus:border-slate-500 focus:ring-slate-200 dark:border-slate-700 dark:focus:border-slate-500 dark:focus:ring-slate-800",
-          className ?? "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
+            ? "border-destructive focus-visible:outline-destructive"
+            : "border-input",
+          className,
+        )}
         {...resto}
       />
 
       {dica && !erro && (
-        <p id={idDica} className="text-xs text-slate-500 dark:text-slate-400">
+        <p id={idDica} className="text-xs text-muted-foreground">
           {dica}
         </p>
       )}
 
       {erro && (
-        <p id={idErro} role="alert" className="text-xs text-red-600 dark:text-red-400">
-          {erro}
-        </p>
+        <span id={idErro}>
+          <Mensagem variante="erro" className="px-2 py-1 text-xs">
+            {erro}
+          </Mensagem>
+        </span>
       )}
     </div>
   );
