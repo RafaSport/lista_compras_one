@@ -1,26 +1,141 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ==========================================================================
+   Tokens do projeto — tema único: dark com base esmeralda.
+   Todos os componentes consomem estas variáveis via classes do Tailwind
+   (bg-background, text-foreground, border-border, bg-primary, etc.).
+   ========================================================================== */
 
 @theme inline {
+  /* Cores base */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Superfícies */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* Ação principal */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  /* Ação secundária */
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  /* Estados neutros */
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* Feedback */
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  /* Bordas, inputs e foco */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Sidebar / navegação */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+
+  /* Raios de arredondamento derivados de --radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  /* Fontes */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  /* Raio base do sistema */
+  --radius: 0.75rem;
+
+  /* Fundo quase preto com leve tom verde — reduz fadiga visual */
+  --background: oklch(0.16 0.012 165);
+  --foreground: oklch(0.96 0.005 165);
+
+  /* Cartões um degrau acima do fundo */
+  --card: oklch(0.21 0.014 165);
+  --card-foreground: oklch(0.96 0.005 165);
+  --popover: oklch(0.23 0.015 165);
+  --popover-foreground: oklch(0.96 0.005 165);
+
+  /* Esmeralda como cor de ação */
+  --primary: oklch(0.72 0.15 162);
+  --primary-foreground: oklch(0.16 0.012 165);
+
+  /* Superfície secundária */
+  --secondary: oklch(0.27 0.018 165);
+  --secondary-foreground: oklch(0.96 0.005 165);
+
+  /* Neutros para texto de apoio */
+  --muted: oklch(0.27 0.018 165);
+  --muted-foreground: oklch(0.68 0.015 165);
+  --accent: oklch(0.30 0.022 165);
+  --accent-foreground: oklch(0.96 0.005 165);
+
+  /* Feedback */
+  --destructive: oklch(0.62 0.20 25);
+  --destructive-foreground: oklch(0.98 0.005 25);
+  --success: oklch(0.72 0.15 162);
+  --success-foreground: oklch(0.16 0.012 165);
+  --warning: oklch(0.78 0.14 80);
+  --warning-foreground: oklch(0.20 0.02 80);
+  --info: oklch(0.68 0.12 240);
+  --info-foreground: oklch(0.16 0.012 240);
+
+  /* Bordas discretas sobre o fundo escuro */
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.72 0.15 162 / 55%);
+
+  /* Sidebar um pouco mais escura que o fundo */
+  --sidebar: oklch(0.13 0.010 165);
+  --sidebar-foreground: oklch(0.92 0.006 165);
+  --sidebar-accent: oklch(0.24 0.020 165);
+  --sidebar-accent-foreground: oklch(0.96 0.005 165);
+  --sidebar-border: oklch(1 0 0 / 10%);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  /* Aplica a cor de borda padrão em todos os elementos */
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Foco visível e consistente em todo o app */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
