@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { cn } from "@/app/lib/utilitarios";
-import { Botao } from "@/componentes/ui/botao";
+import { Botao } from "@/componentes/ui";
 
 type Props = {
   titulo?: string;
