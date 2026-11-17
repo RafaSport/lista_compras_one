@@ -1,0 +1,191 @@
+// Esquema do banco do servidor (Neon / PostgreSQL).
+// Espelha docs/03-modelo-de-dados.md, seção 7.
+// Diferenças em relação ao aparelho:
+//   - existe usuarios e usuario_id
+//   - não existe resumo_precos
+//   - só chegam compras finalizadas, com todos os itens comprados
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------- Enums ----------
+
+enum TipoMedida {
+  volume
+  peso
+  unidade
+}
+
+enum Unidade {
+  L
+  ml
+  kg
+  g
+  un
+}
+
+enum UnidadeBase {
+  L
+  kg
+  un
+}
+
+enum SituacaoCompra {
+  em_montagem
+  em_aberto
+  finalizada
+}
+
+enum SituacaoItem {
+  pendente
+  comprado
+}
+
+// ---------- Usuários ----------
+
+model Usuario {
+  id           String   @id @default(uuid()) @db.Uuid
+  nome         String
+  sobrenome    String
+  login        String   @unique
+  senhaHash    String   @map("senha_hash")
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  supermercados Supermercado[]
+  tiposLista    TipoLista[]
+  produtos      Produto[]
+  compras       Compra[]
+
+  @@map("usuarios")
+}
+
+// ---------- Cadastros ----------
+
+model Supermercado {
+  id           String   @id @default(uuid()) @db.Uuid
+  usuarioId    String   @map("usuario_id") @db.Uuid
+  nome         String
+  ativo        Boolean  @default(true)
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  usuario Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  compras Compra[]
+
+  @@unique([usuarioId, nome])
+  @@index([usuarioId])
+  @@map("supermercados")
+}
+
+model TipoLista {
+  id           String   @id @default(uuid()) @db.Uuid
+  usuarioId    String   @map("usuario_id") @db.Uuid
+  nome         String
+  ativo        Boolean  @default(true)
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  usuario    Usuario     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  itensLista ItemLista[]
+  compras    Compra[]
+
+  @@unique([usuarioId, nome])
+  @@index([usuarioId])
+  @@map("tipos_lista")
+}
+
+model Produto {
+  id           String     @id @default(uuid()) @db.Uuid
+  usuarioId    String     @map("usuario_id") @db.Uuid
+  nome         String
+  tipoMedida   TipoMedida @map("tipo_medida")
+  ativo        Boolean    @default(true)
+  criadoEm     DateTime   @default(now()) @map("criado_em")
+  atualizadoEm DateTime   @updatedAt @map("atualizado_em")
+
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  itensLista  ItemLista[]
+  itensCompra ItemCompra[]
+
+  @@unique([usuarioId, nome])
+  @@index([usuarioId])
+  @@map("produtos")
+}
+
+model ItemLista {
+  id               String   @id @default(uuid()) @db.Uuid
+  tipoListaId      String   @map("tipo_lista_id") @db.Uuid
+  produtoId        String   @map("produto_id") @db.Uuid
+  quantidadePadrao Decimal  @map("quantidade_padrao") @db.Decimal(12, 3)
+  unidadePadrao    Unidade  @map("unidade_padrao")
+  marca            String?
+  observacao       String?
+  criadoEm         DateTime @default(now()) @map("criado_em")
+  atualizadoEm     DateTime @updatedAt @map("atualizado_em")
+
+  tipoLista TipoLista @relation(fields: [tipoListaId], references: [id], onDelete: Cascade)
+  produto   Produto   @relation(fields: [produtoId], references: [id], onDelete: Restrict)
+
+  @@unique([tipoListaId, produtoId])
+  @@index([produtoId])
+  @@map("itens_lista")
+}
+
+// ---------- Compras ----------
+
+model Compra {
+  id             String         @id @db.Uuid
+  usuarioId      String         @map("usuario_id") @db.Uuid
+  supermercadoId String         @map("supermercado_id") @db.Uuid
+  tipoListaId    String         @map("tipo_lista_id") @db.Uuid
+  situacao       SituacaoCompra
+  valorTotal     Int?           @map("valor_total")
+  criadaEm       DateTime       @map("criada_em")
+  fechadaEm      DateTime?      @map("fechada_em")
+  finalizadaEm   DateTime?      @map("finalizada_em")
+  salvaEm        DateTime?      @map("salva_em")
+  atualizadoEm   DateTime       @updatedAt @map("atualizado_em")
+
+  usuario      Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  supermercado Supermercado @relation(fields: [supermercadoId], references: [id], onDelete: Restrict)
+  tipoLista    TipoLista    @relation(fields: [tipoListaId], references: [id], onDelete: Restrict)
+  itens        ItemCompra[]
+
+  @@index([usuarioId, situacao])
+  @@index([usuarioId, supermercadoId, tipoListaId])
+  @@index([usuarioId, salvaEm])
+  @@map("compras")
+}
+
+model ItemCompra {
+  id               String       @id @default(uuid()) @db.Uuid
+  compraId         String       @map("compra_id") @db.Uuid
+  produtoId        String       @map("produto_id") @db.Uuid
+  situacao         SituacaoItem
+  quantidade       Decimal      @db.Decimal(12, 3)
+  embalagem        String?
+  conteudo         Decimal      @db.Decimal(12, 3)
+  unidade          Unidade
+  marca            String?
+  observacao       String?
+  valorUnitario    Int?         @map("valor_unitario")
+  valorItem        Int?         @map("valor_item")
+  unidadeBase      UnidadeBase? @map("unidade_base")
+  precoUnidadeBase Decimal?     @map("preco_unidade_base") @db.Decimal(12, 4)
+  compradoEm       DateTime?    @map("comprado_em")
+  criadoEm         DateTime     @default(now()) @map("criado_em")
+  atualizadoEm     DateTime     @updatedAt @map("atualizado_em")
+
+  compra  Compra  @relation(fields: [compraId], references: [id], onDelete: Cascade)
+  produto Produto @relation(fields: [produtoId], references: [id], onDelete: Restrict)
+
+  @@unique([compraId, produtoId])
+  @@index([produtoId, compradoEm])
+  @@map("itens_compra")
+}
