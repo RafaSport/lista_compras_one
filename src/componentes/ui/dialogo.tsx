@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { cn } from "@/app/lib/utilitarios";
+import { Sobreposicao } from "@/componentes/ui/sobreposicao";
 import { Botao } from "@/componentes/ui/botao";
 
 type Props = {
@@ -73,10 +74,7 @@ export function Dialogo({
       }}
     >
       {/* Fundo escurecido */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-      />
+      <Sobreposicao />
 
       <div
         ref={painelRef}
