@@ -106,21 +106,25 @@ A compra é feita **offline**, no aparelho. Ao finalizar, o usuário aperta um b
 
 ## 4. Regras de negócio
 
-| Código | Regra                                                                                                                                                                                                                              |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| RN01   | **Preço por unidade de medida** = preço da embalagem ÷ conteúdo da embalagem, convertido para a **unidade base**: litro (volume), quilo (peso) ou unidade. Ex.: 500 ml e 0,5 L são equivalentes.                                   |
-| RN02   | O **último valor** e o **valor médio** são calculados por **produto + supermercado**, usando apenas compras **finalizadas**.                                                                                                       |
-| RN03   | O supermercado **mais em conta** é o que tem o **menor preço médio por unidade de medida**. Ex.: 5 L por R$ 9 (R$ 1,80/L) é mais barato que 2 L por R$ 4 (R$ 2,00/L).                                                              |
-| RN04   | O **valor do item** é a **quantidade** multiplicada pelo **valor unitário** informado, e o **total da compra** é a soma dos itens comprados. Ao desfazer um item comprado, o valor dele é retirado do total.                       |
-| RN05   | O item padrão da lista **nunca é alterado** por mudanças feitas durante uma compra.                                                                                                                                                |
-| RN06   | A **marca é apenas informativa** e não entra no cálculo de preços. O produto é cadastrado de forma **genérica** (ex.: "Desinfetante").                                                                                             |
-| RN07   | Marca e observação são **opcionais** no cadastro do item.                                                                                                                                                                          |
-| RN08   | Cada compra tem um **identificador único (UUID)** gerado no aparelho, para que o mesmo envio repetido não crie compras duplicadas no banco.                                                                                        |
-| RN09   | Cada usuário acessa **somente os próprios dados**.                                                                                                                                                                                 |
-| RN10   | Pode haver **mais de uma compra em aberto ao mesmo tempo** (ex.: uma para cada supermercado).                                                                                                                                      |
-| RN11   | Uma compra só pode ser finalizada se tiver **pelo menos um item** e **todos os itens comprados**.                                                                                                                                  |
-| RN12   | O **login** é formado por `nome.sobrenome`, **tudo em minúsculas**, sem acentos e sem espaços (ex.: Rafael + Guedes = `rafael.guedes`). O login é **único**.                                                                       |
-| RN13   | Supermercados, tipos de lista e produtos que **já têm histórico** não são apagados: são **desativados** e somem das escolhas novas, mas o histórico continua intacto. Cadastros sem nenhuma compra podem ser excluídos de verdade. |
+| Código                               | Regra                                                                                                                                                                                                                                                                              |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| RN01                                 | **Preço por unidade de medida** = preço da embalagem ÷ conteúdo da embalagem, convertido para a **unidade base**: litro (volume), quilo (peso) ou unidade. Ex.: 500 ml e 0,5 L são equivalentes. O valor persistido é inteiro em centavos por unidade base; o cálculo interno pode |
+| usar precisão total, sem arredondar. |
+
+| RN02 | O **último valor** e o **valor médio** são calculados por **produto + supermercado**, usando apenas compras **finalizadas**. Ambos são persistidos como inteiro em centavos por unidade base (RN01). | |
+| RN03 | O supermercado **mais em conta** é o que tem o **menor preço médio por unidade de medida**. Ex.: 5 L por R$ 9 (R$ 1,80/L) é mais barato que 2 L por R$ 4 (R$ 2,00/L). A comparação usa o valor persistido em centavos por unidade base (RN01). |
+
+| RN04 | O **valor do item** é a **quantidade** multiplicada pelo **valor unitário** informado, e o **total da compra** é a soma dos itens comprados. Ao desfazer um item comprado, o valor dele é retirado do total. Valores persistidos são inteiros em centavos; o cálculo interno pode usar precisão total (RN01). |
+
+| RN05 | O item padrão da lista **nunca é alterado** por mudanças feitas durante uma compra. |
+| RN06 | A **marca é apenas informativa** e não entra no cálculo de preços. O produto é cadastrado de forma **genérica** (ex.: "Desinfetante"). |
+| RN07 | Marca e observação são **opcionais** no cadastro do item. |
+| RN08 | Cada compra tem um **identificador único (UUID)** gerado no aparelho, para que o mesmo envio repetido não crie compras duplicadas no banco. |
+| RN09 | Cada usuário acessa **somente os próprios dados**. |
+| RN10 | Pode haver **mais de uma compra em aberto ao mesmo tempo** (ex.: uma para cada supermercado). |
+| RN11 | Uma compra só pode ser finalizada se tiver **pelo menos um item** e **todos os itens comprados**. |
+| RN12 | O **login** é formado por `nome.sobrenome`, **tudo em minúsculas**, sem acentos e sem espaços (ex.: Rafael + Guedes = `rafael.guedes`). O login é **único**. |
+| RN13 | Supermercados, tipos de lista e produtos que **já têm histórico** não são apagados: são **desativados** e somem das escolhas novas, mas o histórico continua intacto. Cadastros sem nenhuma compra podem ser excluídos de verdade. |
 
 ---
 

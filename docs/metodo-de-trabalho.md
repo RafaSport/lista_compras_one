@@ -371,7 +371,9 @@ Implementar e testar as regras de negócio puras antes de usá-las nas telas.
    framework.
 2. Escrever o teste no mesmo passo em que a regra é escrita, não depois.
 3. Cobrir os casos de borda: divisão por zero, valor negativo, unidade
-   incompatível, arredondamento.
+   incompatível, arredondamento. Em cálculo monetário, o arredondamento segue a
+   regra do `AGENTS.md`: valor persistido é inteiro em centavos, com `Math.round`;
+   o cálculo interno pode usar precisão total. Ver `.codex/instrucoes/dominio.md`.
 4. Rodar a suíte e confirmar que passa.
 5. Fazer o commit da regra junto com o teste.
 

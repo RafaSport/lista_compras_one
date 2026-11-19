@@ -8,13 +8,14 @@ finalizadas e serve de base para o histórico.
 
 Leia o documento da área antes de mexer nela. Não deduza regra de negócio do código.
 
-| Documento                        | Assunto                                          |
-| -------------------------------- | ------------------------------------------------ |
-| `docs/01-requisitos.md`          | RF, RN, RNF. Fonte da verdade funcional.         |
-| `docs/02-navegacao.md`           | Rotas, telas, fluxo de navegação.                |
-| `docs/03-modelo-de-dados.md`     | Tabelas, campos, cálculos, efeitos de cada ação. |
-| `docs/04-arquitetura.md`         | Camadas, offline, login, sincronização.          |
-| `docs/05-estrutura-de-pastas.md` | Onde cada arquivo fica e quem importa quem.      |
+| Documento                        | Assunto                                           |
+| -------------------------------- | ------------------------------------------------- |
+| `docs/01-requisitos.md`          | RF, RN, RNF. Fonte da verdade funcional.          |
+| `docs/02-navegacao.md`           | Rotas, telas, fluxo de navegação.                 |
+| `docs/03-modelo-de-dados.md`     | Tabelas, campos, cálculos, efeitos de cada ação.  |
+| `docs/04-arquitetura.md`         | Camadas, offline, login, sincronização.           |
+| `docs/05-estrutura-de-pastas.md` | Onde cada arquivo fica e quem importa quem.       |
+| `docs/metodo-de-trabalho.md`     | Como conduzir a tarefa: etapas, revisão, entrega. |     |
 
 ## Instruções por área
 
@@ -33,7 +34,23 @@ Procedimentos repetíveis com critério de aceitação. Use quando a tarefa casa
 - `.codex/skills/criar-tela/SKILL.md`
 - `.codex/skills/criar-repositorio/SKILL.md`
 - `.codex/skills/criar-endpoint/SKILL.md`
+- `.codex/skills/criar-componente/SKILL.md`
+- `.codex/skills/criar-teste/SKILL.md`
+- `.codex/skills/criar-migracao-dexie/SKILL.md`
 - `.codex/skills/calcular-preco/SKILL.md`
+- `.codex/skills/revisar-pr/SKILL.md`
+
+## Skills de terceiros
+
+A pasta `.agents/` contém skills de terceiros (Prisma e afins), instaladas por
+ferramenta externa. Regras:
+
+- Não edite nada em `.agents/`. Atualização sobrescreve.
+- Não use `.agents/` como referência de padrão do projeto. O padrão do projeto
+  está em `.codex/` e `docs/`.
+- `.agents/` está no `.prettierignore` e não entra em verificação de formatação.
+- Se uma skill de `.agents/` conflitar com uma regra deste arquivo, vale este
+  arquivo.
 
 ## Regras invioláveis
 
