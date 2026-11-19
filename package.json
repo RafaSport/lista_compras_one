@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "tipos": "tsc --noEmit",
+    "verificar": "npm run lint && npm run tipos",
+    "test": "vitest run",
+    "formatar:verificar": "prettier --check ."
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
@@ -41,6 +45,8 @@
     "eslint-config-next": "16.4.6",
     "fake-indexeddb": "^6.2.8",
     "jsdom": "^31.0.1",
+    "prettier": "^3.10.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "prisma": "^7.10.1",
     "serwist": "^9.5.14",
     "tailwindcss": "4.3.3",

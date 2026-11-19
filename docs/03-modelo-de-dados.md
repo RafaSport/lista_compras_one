@@ -130,24 +130,26 @@ erDiagram
 
 ### 4.6 `itens_compra` (RF05 a RF14)
 
-| Campo                        | Tipo               | Obrigatório   | Descrição                                                                                                      |
-| ---------------------------- | ------------------ | ------------- | -------------------------------------------------------------------------------------------------------------- |
-| `id`                         | uuid               | sim           | Chave primária.                                                                                                |
-| `compra_id`                  | uuid               | sim           | Referência a `compras`.                                                                                        |
-| `produto_id`                 | uuid               | sim           | Referência a `produtos`.                                                                                       |
-| `situacao`                   | enum               | sim           | `pendente` ou `comprado`.                                                                                      |
-| `quantidade`                 | decimal            | sim           | Quantas embalagens (ou quantos litros, quilos, unidades quando a unidade é "pura"). Maior que zero.            |
-| `embalagem`                  | texto              | não           | Texto livre, ex.: galão, frasco, caixa. Só descritivo.                                                         |
-| `conteudo`                   | decimal            | sim           | Quanto vem em **uma** embalagem, na `unidade`. Assume 1 quando a unidade é L, kg ou un "pura". Maior que zero. |
-| `unidade`                    | enum `unidade`     | sim           | `L`, `ml`, `kg`, `g` ou `un`.                                                                                  |
-| `marca`                      | texto              | não           | Informativa, não entra no cálculo (RN06).                                                                      |
-| `observacao`                 | texto              | não           | Opcional.                                                                                                      |
-| `valor_unitario`             | inteiro (centavos) | só ao comprar | Preço de **uma** embalagem, informado pelo usuário.                                                            |
-| `valor_item`                 | inteiro (centavos) | não           | **Calculado** ao comprar: `quantidade × valor_unitario`.                                                       |
-| `unidade_base`               | enum               | não           | **Calculado** ao comprar: `L`, `kg` ou `un`.                                                                   |
-| `preco_unidade_base`         | decimal            | não           | **Calculado** ao comprar: preço de 1 litro, 1 quilo ou 1 unidade (em centavos).                                |
-| `comprado_em`                | data/hora          | não           | Quando o botão Comprar foi acionado.                                                                           |
-| `criado_em`, `atualizado_em` | data/hora          | sim           |                                                                                                                |
+| Campo                        | Tipo                | Obrigatório   | Descrição                                                                                                      |
+| ---------------------------- | ------------------- | ------------- | -------------------------------------------------------------------------------------------------------------- |
+| `id`                         | uuid                | sim           | Chave primária.                                                                                                |
+| `compra_id`                  | uuid                | sim           | Referência a `compras`.                                                                                        |
+| `produto_id`                 | uuid                | sim           | Referência a `produtos`.                                                                                       |
+| `situacao`                   | enum                | sim           | `pendente` ou `comprado`.                                                                                      |
+| `quantidade`                 | decimal             | sim           | Quantas embalagens (ou quantos litros, quilos, unidades quando a unidade é "pura"). Maior que zero.            |
+| `embalagem`                  | texto               | não           | Texto livre, ex.: galão, frasco, caixa. Só descritivo.                                                         |
+| `conteudo`                   | decimal             | sim           | Quanto vem em **uma** embalagem, na `unidade`. Assume 1 quando a unidade é L, kg ou un "pura". Maior que zero. |
+| `unidade`                    | enum `unidade`      | sim           | `L`, `ml`, `kg`, `g` ou `un`.                                                                                  |
+| `marca`                      | texto               | não           | Informativa, não entra no cálculo (RN06).                                                                      |
+| `observacao`                 | texto               | não           | Opcional.                                                                                                      |
+| `valor_unitario`             | inteiro (centavos)  | só ao comprar | Preço de **uma** embalagem, informado pelo usuário.                                                            |
+| `valor_item`                 | inteiro (centavos)  | não           | **Calculado** ao comprar: `quantidade × valor_unitario`.                                                       |
+| `unidade_base`               | enum                | não           | **Calculado** ao comprar: `L`, `kg` ou `un`.                                                                   |
+| `preco_unidade_base`         | inteiro (centavos)* | não           | **Calculado** ao comprar: preço de 1 litro, 1 quilo ou 1 unidade (em centavos).                                |
+| `comprado_em`                | data/hora           | não           | Quando o botão Comprar foi acionado.                                                                           |
+| `criado_em`, `atualizado_em` | data/hora           | sim           |                                                                                                                |
+
+- Valor persistido: inteiro (centavos); cálculo interno usa precisão total, sem arredondar.
 
 Único por (`compra_id`, `produto_id`): um produto aparece uma vez em cada compra.
 
@@ -155,15 +157,17 @@ erDiagram
 
 É um **cache** que permite mostrar último valor e valor médio sem internet e sem recalcular o histórico inteiro. Pode ser reconstruído a qualquer momento a partir de `itens_compra`.
 
-| Campo                | Tipo      | Descrição                                                  |
-| -------------------- | --------- | ---------------------------------------------------------- |
-| `produto_id`         | uuid      | Parte da chave primária.                                   |
-| `supermercado_id`    | uuid      | Parte da chave primária.                                   |
-| `unidade_base`       | enum      | `L`, `kg` ou `un`.                                         |
-| `ultimo_valor`       | decimal   | `preco_unidade_base` da compra mais recente.               |
-| `ultima_compra_em`   | data/hora | Data dessa compra.                                         |
-| `soma_precos`        | decimal   | Soma de todos os `preco_unidade_base` registrados.         |
-| `quantidade_compras` | inteiro   | Quantas vezes o produto foi comprado naquele supermercado. |
+| Campo                | Tipo                | Descrição                                                  |
+| -------------------- | ------------------- | ---------------------------------------------------------- |
+| `produto_id`         | uuid                | Parte da chave primária.                                   |
+| `supermercado_id`    | uuid                | Parte da chave primária.                                   |
+| `unidade_base`       | enum                | `L`, `kg` ou `un`.                                         |
+| `ultimo_valor`       | inteiro (centavos)* | `preco_unidade_base` da compra mais recente.               |
+| `ultima_compra_em`   | data/hora           | Data dessa compra.                                         |
+| `soma_precos`        | inteiro (centavos)* | Soma de todos os `preco_unidade_base` registrados.         |
+| `quantidade_compras` | inteiro             | Quantas vezes o produto foi comprado naquele supermercado. |
+
+- Valor persistido: inteiro (centavos); cálculo interno usa precisão total, sem arredondar.
 
 ### 4.8 `usuarios` (somente no servidor)
 
@@ -244,16 +248,19 @@ Para cada produto, compara-se o `valor_medio` de cada supermercado dentro da mes
 
 ## 7. Aparelho e servidor
 
-| Assunto                              | Aparelho (Dexie)                                 | Servidor (PostgreSQL)                                                                                                     |
-| ------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| Tabelas de cadastro e compra         | Todas                                            | Todas, menos `resumo_precos`                                                                                              |
-| `usuarios`                           | Não existe                                       | Existe. A sessão é um token (JWT), então o Auth.js não precisa de tabelas extras.                                         |
-| `usuario_id`                         | Não existe: o banco local é separado por usuário | Existe em `supermercados`, `tipos_lista`, `produtos` e `compras`. As demais tabelas herdam o dono pela tabela-mãe (RN09). |
-| Compras `em_montagem` e `em_aberto`  | Existem                                          | **Não existem**: só chegam compras finalizadas                                                                            |
-| Itens `pendente`                     | Existem                                          | **Não existem**: ao finalizar, todos os itens da compra já estão comprados                                                |
-| Dinheiro                             | Inteiro em centavos                              | Inteiro em centavos                                                                                                       |
-| Quantidades e preço por unidade base | Número                                           | `decimal`                                                                                                                 |
-| Estatísticas                         | Não                                              | Consultas SQL sobre `itens_compra` (RF19)                                                                                 |
+| Assunto                             | Aparelho (Dexie)                                 | Servidor (PostgreSQL)                                                                                                     |
+| ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Tabelas de cadastro e compra        | Todas                                            | Todas, menos `resumo_precos`                                                                                              |
+| `usuarios`                          | Não existe                                       | Existe. A sessão é um token (JWT), então o Auth.js não precisa de tabelas extras.                                         |
+| `usuario_id`                        | Não existe: o banco local é separado por usuário | Existe em `supermercados`, `tipos_lista`, `produtos` e `compras`. As demais tabelas herdam o dono pela tabela-mãe (RN09). |
+| Compras `em_montagem` e `em_aberto` | Existem                                          | **Não existem**: só chegam compras finalizadas                                                                            |
+| Itens `pendente`                    | Existem                                          | **Não existem**: ao finalizar, todos os itens da compra já estão comprados                                                |
+| Dinheiro                            | Inteiro em centavos                              | Inteiro em centavos                                                                                                       |
+| Quantidades                         | Número                                           | `decimal`                                                                                                                 |
+| Preço por unidade base              | Número                                           | inteiro (centavos)*                                                                                                       |
+| Estatísticas                        | Não                                              | Consultas SQL sobre `itens_compra` (RF19)                                                                                 |
+
+- Valor persistido: inteiro (centavos); cálculo interno usa precisão total, sem arredondar.
 
 **Envio ao servidor:** cada envio leva a compra, seus itens comprados e os cadastros referenciados (supermercado, tipo de lista e produtos). O servidor grava tudo com "inserir ou atualizar" pelo `id`. Repetir o envio é seguro.
 

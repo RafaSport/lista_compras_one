@@ -15,7 +15,7 @@ valor, média ou comparação entre supermercados.
 1. A fórmula está em `docs/03-modelo-de-dados.md`, seção 5.
 2. Você sabe a unidade de entrada e a unidade base de saída.
 3. Você sabe se o resultado é dinheiro (inteiro em centavos) ou preço por unidade
-   (pode ter casas decimais).
+   base (inteiro em centavos por unidade base quando persistido).
 
 ## Procedimento
 
@@ -23,7 +23,12 @@ valor, média ou comparação entre supermercados.
 2. Receba a data como parâmetro quando precisar de "mais recente". Não chame
    `Date.now()` dentro da função.
 3. Dinheiro: inteiro em centavos, arredondado com `Math.round`.
-4. Preço por unidade base: não arredonde no cálculo.
+4. Preço por unidade base:
+   - CÁLCULO INTERNO: pode usar precisão total, sem arredondar. É o que permite
+     comparar dois produtos sem perder diferença de centavo.
+   - VALOR PERSISTIDO E EXIBIDO: inteiro em centavos por unidade base, conforme
+     RN01 e a regra inviolável 1 do `AGENTS.md`. Arredonde com `Math.round` no
+     momento de gravar e de exibir.
 5. Escreva o teste ao lado, com os exemplos do documento 03, seção 5.2.
 6. Cubra borda: quantidade zero, conteúdo zero, unidade incompatível.
 
@@ -48,4 +53,6 @@ valor, média ou comparação entre supermercados.
 - [ ] Função pura, sem import de React, Dexie, Prisma ou rede.
 - [ ] Teste cobre os cinco casos acima.
 - [ ] Dinheiro é inteiro em centavos.
+- [ ] `preco_unidade_base` persistido é inteiro em centavos por unidade base; o
+      cálculo interno pode usar precisão total, mas o valor gravado é arredondado.
 - [ ] `npm test` passa.

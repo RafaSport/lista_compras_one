@@ -41,8 +41,7 @@ Fatores: `L`, `kg`, `un` = 1 · `ml` = 0,001 · `g` = 0,001.
 ## Regras de arredondamento
 
 - `valor_item` é inteiro em centavos: use `Math.round`.
-- `preco_unidade_base` pode ter casas decimais. Não arredonde no cálculo; arredonde
-  só na exibição.
+- `preco_unidade_base` para CÁLCULO INTERNO pode ter casas decimais e não é arredondado. O valor PERSISTIDO e EXIBIDO é inteiro em centavos por unidade base, conforme RN01 e a regra inviolável 1.
 - Nunca use `toFixed` para voltar a número. `toFixed` devolve string.
 
 ## Normalização do login (RN12)
