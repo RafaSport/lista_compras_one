@@ -28,7 +28,7 @@ export function Erro({
       // role="alert" faz o leitor de tela anunciar a falha
       role="alert"
       className={cn(
-        "flex flex-col items-center justify-center gap-3 rounded-xl border border-destructive/30 bg-destructive/5 px-6 py-10 text-center",
+        "border-destructive/30 bg-destructive/5 flex flex-col items-center justify-center gap-3 rounded-xl border px-6 py-10 text-center",
         className,
       )}
     >
@@ -41,8 +41,8 @@ export function Erro({
       </div>
 
       <div className="flex flex-col gap-1">
-        <p className="text-sm font-semibold text-foreground">{titulo}</p>
-        <p className="max-w-sm text-xs text-muted-foreground">{descricao}</p>
+        <p className="text-foreground text-sm font-semibold">{titulo}</p>
+        <p className="text-muted-foreground max-w-sm text-xs">{descricao}</p>
       </div>
 
       {aoTentarNovamente && (

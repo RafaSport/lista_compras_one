@@ -12,13 +12,7 @@ type Props = FormHTMLAttributes<HTMLFormElement> & {
 
 // Casca de formulário: trata o envio, exibe erro geral e mensagem de sucesso.
 // Os campos chegam como children, então o mesmo componente serve a qualquer form.
-export function Formulario({
-  erroGeral,
-  sucesso,
-  children,
-  className,
-  ...resto
-}: Props) {
+export function Formulario({ erroGeral, sucesso, children, className, ...resto }: Props) {
   return (
     <form
       // noValidate desliga a validação nativa do navegador;

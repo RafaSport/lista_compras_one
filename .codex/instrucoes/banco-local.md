@@ -14,16 +14,16 @@ gravam. É a única camada que conhece o Dexie.
 ## Estrutura
 
 src/banco-local/
-  esquema.ts                  Definição das tabelas e versões
-  abrir-banco.ts              Abre o banco do usuário logado
-  repositorios/
-    supermercados.ts
-    tipos-lista.ts
-    produtos.ts
-    itens-lista.ts
-    compras.ts
-    itens-compra.ts
-    resumo-precos.ts
+esquema.ts Definição das tabelas e versões
+abrir-banco.ts Abre o banco do usuário logado
+repositorios/
+supermercados.ts
+tipos-lista.ts
+produtos.ts
+itens-lista.ts
+compras.ts
+itens-compra.ts
+resumo-precos.ts
 
 ## Um banco por usuário
 

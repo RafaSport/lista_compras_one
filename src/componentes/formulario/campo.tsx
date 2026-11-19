@@ -25,9 +25,7 @@ export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
   const idDica = `${idCampo}-dica`;
 
   // Liga o input aos textos auxiliares para o leitor de tela
-  const descritoPor = [erro ? idErro : null, dica ? idDica : null]
-    .filter(Boolean)
-    .join(" ");
+  const descritoPor = [erro ? idErro : null, dica ? idDica : null].filter(Boolean).join(" ");
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -41,20 +39,18 @@ export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
         aria-invalid={erro ? true : undefined}
         aria-describedby={descritoPor || undefined}
         className={cn(
-          "h-10 w-full rounded-lg border bg-background px-3 text-sm text-foreground",
+          "bg-background text-foreground h-10 w-full rounded-lg border px-3 text-sm",
           "placeholder:text-muted-foreground",
-          "transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          "focus-visible:outline-ring transition-colors focus-visible:outline-2 focus-visible:outline-offset-2",
           "disabled:cursor-not-allowed disabled:opacity-60",
-          erro
-            ? "border-destructive focus-visible:outline-destructive"
-            : "border-input",
+          erro ? "border-destructive focus-visible:outline-destructive" : "border-input",
           className,
         )}
         {...resto}
       />
 
       {dica && !erro && (
-        <p id={idDica} className="text-xs text-muted-foreground">
+        <p id={idDica} className="text-muted-foreground text-xs">
           {dica}
         </p>
       )}

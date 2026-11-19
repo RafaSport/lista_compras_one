@@ -26,9 +26,7 @@ export function unidadeCompativel(
   return (UNIDADES_POR_TIPO[tipoMedida] as readonly string[]).includes(unidade);
 }
 
-export function unidadeBaseDoTipo(
-  tipoMedida: keyof typeof UNIDADES_POR_TIPO,
-): "L" | "kg" | "un" {
+export function unidadeBaseDoTipo(tipoMedida: keyof typeof UNIDADES_POR_TIPO): "L" | "kg" | "un" {
   const mapa = { volume: "L", peso: "kg", unidade: "un" } as const;
   return mapa[tipoMedida];
 }

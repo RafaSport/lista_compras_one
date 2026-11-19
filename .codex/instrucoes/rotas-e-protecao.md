@@ -24,11 +24,11 @@ Siga `docs/02-navegacao.md`, seção 3. Não crie rota nova sem requisito.
 
 Regra de entrada por código da compra, em `/compras/[id]`:
 
-| Situação | Redireciona para |
-|----------|------------------|
-| `em_montagem` | `/compras/[id]/montar` |
-| `em_aberto` | `/compras/[id]/comprar` |
-| `finalizada` | fica no detalhe |
+| Situação      | Redireciona para        |
+| ------------- | ----------------------- |
+| `em_montagem` | `/compras/[id]/montar`  |
+| `em_aberto`   | `/compras/[id]/comprar` |
+| `finalizada`  | fica no detalhe         |
 
 ## Proteção
 

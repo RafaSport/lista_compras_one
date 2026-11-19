@@ -8,13 +8,13 @@ finalizadas e serve de base para o histórico.
 
 Leia o documento da área antes de mexer nela. Não deduza regra de negócio do código.
 
-| Documento | Assunto |
-|-----------|---------|
-| `docs/01-requisitos.md` | RF, RN, RNF. Fonte da verdade funcional. |
-| `docs/02-navegacao.md` | Rotas, telas, fluxo de navegação. |
-| `docs/03-modelo-de-dados.md` | Tabelas, campos, cálculos, efeitos de cada ação. |
-| `docs/04-arquitetura.md` | Camadas, offline, login, sincronização. |
-| `docs/05-estrutura-de-pastas.md` | Onde cada arquivo fica e quem importa quem. |
+| Documento                        | Assunto                                          |
+| -------------------------------- | ------------------------------------------------ |
+| `docs/01-requisitos.md`          | RF, RN, RNF. Fonte da verdade funcional.         |
+| `docs/02-navegacao.md`           | Rotas, telas, fluxo de navegação.                |
+| `docs/03-modelo-de-dados.md`     | Tabelas, campos, cálculos, efeitos de cada ação. |
+| `docs/04-arquitetura.md`         | Camadas, offline, login, sincronização.          |
+| `docs/05-estrutura-de-pastas.md` | Onde cada arquivo fica e quem importa quem.      |
 
 ## Instruções por área
 
@@ -61,7 +61,7 @@ Estas quebram o sistema se violadas. Não negocie, não "melhore".
 
 ## Regras de trabalho neste repositório
 
-- Não apague nem sobrescreva arquivos existentes. Se      precisar criar algo que já
+- Não apague nem sobrescreva arquivos existentes. Se precisar criar algo que já
   existe, crie com outro caminho e registre o conflito no relatório final. O dono
   resolve manualmente.
 - Não instale dependência nova sem que o requisito peça. A stack está fechada em
@@ -88,15 +88,14 @@ Estas quebram o sistema se violadas. Não negocie, não "melhore".
   qualquer mudança no schema, rode `npx prisma generate` antes do tsc. Sem isso,
   o import de PrismaClient falha com "não tem nenhum membro exportado".
 
-
 ## Verificação obrigatória
 
 Antes de dizer que terminou, rode o que existir:
 
-- npm run tipos        (tsc --noEmit)
+- npm run tipos (tsc --noEmit)
 - npm run formatar:verificar
-- npm run verificar    (lint + tipos)
-- npm test             (Vitest)
+- npm run verificar (lint + tipos)
+- npm test (Vitest)
 
 Se um script não existir, diga isso no relatório em vez de inventar resultado.
 Nunca afirme que um teste passou sem ter executado.

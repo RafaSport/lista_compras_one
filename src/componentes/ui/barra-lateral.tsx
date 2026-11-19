@@ -26,15 +26,13 @@ export function BarraLateral({ itens, rodape, className }: Props) {
   return (
     <aside
       className={cn(
-        "hidden h-full w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex",
+        "border-sidebar-border bg-sidebar hidden h-full w-60 shrink-0 flex-col border-r md:flex",
         className,
       )}
     >
       {/* Cabeçalho da barra: identidade do app */}
-      <div className="flex h-14 items-center border-b border-sidebar-border px-4">
-        <span className="text-sm font-semibold text-sidebar-foreground">
-          Lista de Compras
-        </span>
+      <div className="border-sidebar-border flex h-14 items-center border-b px-4">
+        <span className="text-sidebar-foreground text-sm font-semibold">Lista de Compras</span>
       </div>
 
       {/* Lista de navegação */}
@@ -42,9 +40,7 @@ export function BarraLateral({ itens, rodape, className }: Props) {
         <ul className="flex flex-col gap-1">
           {itens.map((item) => {
             // Ativo quando o caminho atual é igual ou filho do href
-            const ativo =
-              caminhoAtual === item.href ||
-              caminhoAtual.startsWith(`${item.href}/`);
+            const ativo = caminhoAtual === item.href || caminhoAtual.startsWith(`${item.href}/`);
 
             return (
               <li key={item.href}>
@@ -53,9 +49,9 @@ export function BarraLateral({ itens, rodape, className }: Props) {
                   aria-current={ativo ? "page" : undefined}
                   className={cn(
                     "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
-                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                    "focus-visible:outline-ring focus-visible:outline-2 focus-visible:outline-offset-2",
                     ativo
-                      ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                       : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
                   )}
                 >
@@ -73,9 +69,7 @@ export function BarraLateral({ itens, rodape, className }: Props) {
       </nav>
 
       {/* Rodapé da barra */}
-      {rodape && (
-        <div className="border-t border-sidebar-border p-2">{rodape}</div>
-      )}
+      {rodape && <div className="border-sidebar-border border-t p-2">{rodape}</div>}
     </aside>
   );
 }

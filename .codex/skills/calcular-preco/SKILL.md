@@ -29,11 +29,11 @@ valor, média ou comparação entre supermercados.
 
 ## Conversão
 
-| Unidade | Fator |
-|---------|-------|
-| `L`, `kg`, `un` | 1 |
-| `ml` | 0,001 |
-| `g` | 0,001 |
+| Unidade         | Fator |
+| --------------- | ----- |
+| `L`, `kg`, `un` | 1     |
+| `ml`            | 0,001 |
+| `g`             | 0,001 |
 
 ## Casos de teste obrigatórios
 

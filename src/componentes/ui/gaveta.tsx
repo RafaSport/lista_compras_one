@@ -74,26 +74,20 @@ export function Gaveta({
         aria-describedby={descricao ? "gaveta-descricao" : undefined}
         tabIndex={-1}
         className={cn(
-          "relative z-10 flex h-full w-full max-w-sm flex-col border-border bg-sidebar shadow-xl",
+          "border-border bg-sidebar relative z-10 flex h-full w-full max-w-sm flex-col shadow-xl",
           "focus:outline-none",
           lado === "direita" ? "ml-auto border-l" : "mr-auto border-r",
           className,
         )}
       >
         {/* Cabeçalho fixo */}
-        <div className="flex items-start justify-between gap-3 border-b border-sidebar-border p-4">
+        <div className="border-sidebar-border flex items-start justify-between gap-3 border-b p-4">
           <div className="flex flex-col gap-0.5">
-            <h2
-              id="gaveta-titulo"
-              className="text-base font-semibold text-sidebar-foreground"
-            >
+            <h2 id="gaveta-titulo" className="text-sidebar-foreground text-base font-semibold">
               {titulo}
             </h2>
             {descricao && (
-              <p
-                id="gaveta-descricao"
-                className="text-xs text-muted-foreground"
-              >
+              <p id="gaveta-descricao" className="text-muted-foreground text-xs">
                 {descricao}
               </p>
             )}
@@ -103,16 +97,14 @@ export function Gaveta({
             type="button"
             onClick={aoFechar}
             aria-label="Fechar"
-            className="shrink-0 rounded-sm px-1 text-lg leading-none text-muted-foreground transition-colors hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground shrink-0 rounded-sm px-1 text-lg leading-none transition-colors"
           >
             ×
           </button>
         </div>
 
         {/* Conteúdo com scroll próprio */}
-        <div className="flex-1 overflow-y-auto p-4 text-sidebar-foreground">
-          {children}
-        </div>
+        <div className="text-sidebar-foreground flex-1 overflow-y-auto p-4">{children}</div>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ export function Vazio({ titulo, descricao, acao, icone, className }: Props) {
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border px-6 py-10 text-center",
+        "border-border flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed px-6 py-10 text-center",
         className,
       )}
     >
@@ -26,10 +26,8 @@ export function Vazio({ titulo, descricao, acao, icone, className }: Props) {
       )}
 
       <div className="flex flex-col gap-1">
-        <p className="text-sm font-semibold text-foreground">{titulo}</p>
-        {descricao && (
-          <p className="max-w-sm text-xs text-muted-foreground">{descricao}</p>
-        )}
+        <p className="text-foreground text-sm font-semibold">{titulo}</p>
+        {descricao && <p className="text-muted-foreground max-w-sm text-xs">{descricao}</p>}
       </div>
 
       {acao && <div className="mt-1">{acao}</div>}

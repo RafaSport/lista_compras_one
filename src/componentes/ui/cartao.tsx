@@ -16,11 +16,7 @@ const variantes = {
 export function Cartao({ variante = "padrao", className, ...resto }: Props) {
   return (
     <div
-      className={cn(
-        "rounded-xl border p-4 shadow-sm",
-        variantes[variante],
-        className,
-      )}
+      className={cn("rounded-xl border p-4 shadow-sm", variantes[variante], className)}
       {...resto}
     />
   );
@@ -41,10 +37,8 @@ export function CartaoCabecalho({
   return (
     <div className={cn("flex items-start justify-between gap-3", className)}>
       <div className="flex flex-col gap-0.5">
-        <h3 className="text-sm font-semibold text-card-foreground">{titulo}</h3>
-        {descricao && (
-          <p className="text-xs text-muted-foreground">{descricao}</p>
-        )}
+        <h3 className="text-card-foreground text-sm font-semibold">{titulo}</h3>
+        {descricao && <p className="text-muted-foreground text-xs">{descricao}</p>}
       </div>
       {acao && <div className="shrink-0">{acao}</div>}
     </div>
@@ -63,17 +57,11 @@ export function CartaoConteudo({
 }
 
 // Rodapé do cartão: ações alinhadas à direita
-export function CartaoRodape({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function CartaoRodape({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <div
       className={cn(
-        "mt-4 flex items-center justify-end gap-2 border-t border-border pt-3",
+        "border-border mt-4 flex items-center justify-end gap-2 border-t pt-3",
         className,
       )}
     >

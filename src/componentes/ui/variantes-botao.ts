@@ -12,8 +12,7 @@ const base =
 
 const variantes: Record<Variante, string> = {
   primario: "bg-primary text-primary-foreground hover:bg-primary/90",
-  secundario:
-    "bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border",
+  secundario: "bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border",
   fantasma: "bg-transparent text-foreground hover:bg-accent",
   perigo: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
 };

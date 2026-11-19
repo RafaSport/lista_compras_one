@@ -9,16 +9,8 @@ export const senhaSchema = z
 
 export const cadastroSchema = z
   .object({
-    nome: z
-      .string()
-      .trim()
-      .min(2, "Informe o nome.")
-      .max(40, "Nome muito longo."),
-    sobrenome: z
-      .string()
-      .trim()
-      .min(2, "Informe o sobrenome.")
-      .max(60, "Sobrenome muito longo."),
+    nome: z.string().trim().min(2, "Informe o nome.").max(40, "Nome muito longo."),
+    sobrenome: z.string().trim().min(2, "Informe o sobrenome.").max(60, "Sobrenome muito longo."),
     senha: senhaSchema,
     confirmacaoSenha: z.string(),
     codigoConvite: z.string().min(1, "Informe o código de convite."),

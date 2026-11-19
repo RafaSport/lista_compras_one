@@ -84,23 +84,17 @@ export function Dialogo({
         aria-describedby={descricao ? "dialogo-descricao" : undefined}
         tabIndex={-1}
         className={cn(
-          "relative z-10 w-full max-w-md rounded-xl border border-border bg-popover p-5 shadow-xl",
+          "border-border bg-popover relative z-10 w-full max-w-md rounded-xl border p-5 shadow-xl",
           "focus:outline-none",
           className,
         )}
       >
-        <h2
-          id="dialogo-titulo"
-          className="text-base font-semibold text-popover-foreground"
-        >
+        <h2 id="dialogo-titulo" className="text-popover-foreground text-base font-semibold">
           {titulo}
         </h2>
 
         {descricao && (
-          <p
-            id="dialogo-descricao"
-            className="mt-1 text-sm text-muted-foreground"
-          >
+          <p id="dialogo-descricao" className="text-muted-foreground mt-1 text-sm">
             {descricao}
           </p>
         )}
@@ -108,12 +102,7 @@ export function Dialogo({
         {children && <div className="mt-4">{children}</div>}
 
         <div className="mt-5 flex items-center justify-end gap-2">
-          <Botao
-            variante="secundario"
-            tamanho="sm"
-            onClick={aoFechar}
-            disabled={carregando}
-          >
+          <Botao variante="secundario" tamanho="sm" onClick={aoFechar} disabled={carregando}>
             {textoCancelar}
           </Botao>
 

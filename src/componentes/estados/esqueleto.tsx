@@ -9,19 +9,10 @@ type Props = {
 // Bloco cinza animado que ocupa o lugar do conteúdo enquanto ele carrega.
 // Evita o "pulo" de layout quando os dados chegam.
 function Bloco({ className }: { className?: string }) {
-  return (
-    <div
-      aria-hidden="true"
-      className={cn("animate-pulse rounded-md bg-muted", className)}
-    />
-  );
+  return <div aria-hidden="true" className={cn("bg-muted animate-pulse rounded-md", className)} />;
 }
 
-export function Esqueleto({
-  variante = "linha",
-  quantidade = 3,
-  className,
-}: Props) {
+export function Esqueleto({ variante = "linha", quantidade = 3, className }: Props) {
   // Leitor de tela anuncia que algo está carregando
   const rotulo = <span className="sr-only">Carregando...</span>;
 
@@ -30,7 +21,7 @@ export function Esqueleto({
       <div className={cn("flex flex-col gap-3", className)}>
         {rotulo}
         {Array.from({ length: quantidade }).map((_, i) => (
-          <div key={i} className="rounded-xl border border-border bg-card p-4">
+          <div key={i} className="border-border bg-card rounded-xl border p-4">
             <Bloco className="h-4 w-1/3" />
             <Bloco className="mt-3 h-3 w-2/3" />
             <Bloco className="mt-2 h-3 w-1/2" />

@@ -10,18 +10,13 @@ type Props = ComponentProps<typeof Link> & {
 // A variante "discreto" serve para ações secundárias, como "esqueci a senha".
 const variantes = {
   padrao: "text-primary underline underline-offset-4 hover:text-primary/80",
-  discreto:
-    "text-muted-foreground underline-offset-4 hover:text-foreground hover:underline",
+  discreto: "text-muted-foreground underline-offset-4 hover:text-foreground hover:underline",
 };
 
 export function LinkTexto({ variante = "padrao", className, ...resto }: Props) {
   return (
     <Link
-      className={cn(
-        "rounded-sm font-medium transition-colors",
-        variantes[variante],
-        className,
-      )}
+      className={cn("rounded-sm font-medium transition-colors", variantes[variante], className)}
       {...resto}
     />
   );

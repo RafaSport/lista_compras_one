@@ -30,13 +30,13 @@ Repetir o envio não duplica. O `id` é UUID gerado no aparelho (RN08).
 
 ## Endpoints
 
-| Endpoint | Função |
-|----------|--------|
-| `POST /api/compras` | Recebe compra finalizada. Idempotente. |
-| `/api/auth/*` | Auth.js: login, logout, sessão. |
-| `POST /api/cadastro` | Cria usuário. Exige código de convite. Recusa login duplicado. |
-| `GET /api/sincronizacao` | Cadastros e histórico do usuário. |
-| `DELETE /api/compras/[id]` | Exclui compra salva. |
+| Endpoint                   | Função                                                         |
+| -------------------------- | -------------------------------------------------------------- |
+| `POST /api/compras`        | Recebe compra finalizada. Idempotente.                         |
+| `/api/auth/*`              | Auth.js: login, logout, sessão.                                |
+| `POST /api/cadastro`       | Cria usuário. Exige código de convite. Recusa login duplicado. |
+| `GET /api/sincronizacao`   | Cadastros e histórico do usuário.                              |
+| `DELETE /api/compras/[id]` | Exclui compra salva.                                           |
 
 ## Aparelho novo
 

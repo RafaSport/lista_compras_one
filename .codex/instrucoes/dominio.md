@@ -16,26 +16,25 @@ sem `async`, sem `Date.now()` escondido (receba a data como parâmetro).
 
 ## O que fica aqui
 
-| Arquivo | Função |
-|---------|--------|
-| `converter-unidade.ts` | Converte `ml`→`L` e `g`→`kg` para a unidade base. |
-| `calcular-preco-unidade-base.ts` | RN01: preço por litro, quilo ou unidade. |
-| `calcular-valor-item.ts` | RN04: quantidade × valor unitário. |
-| `calcular-total-compra.ts` | RN04: soma dos itens comprados. |
-| `calcular-ultimo-e-media.ts` | RN02: último valor e média por produto+supermercado. |
-| `comparar-supermercados.ts` | RN03: menor preço médio por unidade base. |
-| `pode-finalizar-compra.ts` | RN11: ao menos um item, todos comprados. |
-| `gerar-login.ts` | RN12: `nome.sobrenome` normalizado. |
-| `validar-senha.ts` | Mínimo 8 caracteres, com letra e número. |
+| Arquivo                          | Função                                               |
+| -------------------------------- | ---------------------------------------------------- |
+| `converter-unidade.ts`           | Converte `ml`→`L` e `g`→`kg` para a unidade base.    |
+| `calcular-preco-unidade-base.ts` | RN01: preço por litro, quilo ou unidade.             |
+| `calcular-valor-item.ts`         | RN04: quantidade × valor unitário.                   |
+| `calcular-total-compra.ts`       | RN04: soma dos itens comprados.                      |
+| `calcular-ultimo-e-media.ts`     | RN02: último valor e média por produto+supermercado. |
+| `comparar-supermercados.ts`      | RN03: menor preço médio por unidade base.            |
+| `pode-finalizar-compra.ts`       | RN11: ao menos um item, todos comprados.             |
+| `gerar-login.ts`                 | RN12: `nome.sobrenome` normalizado.                  |
+| `validar-senha.ts`               | Mínimo 8 caracteres, com letra e número.             |
 
 ## Fórmulas
 
 preco_unidade_base = valor_unitario ÷ (conteudo × fator_da_unidade)
-valor_item         = quantidade × valor_unitario      (arredondar para centavos)
-valor_total        = soma dos valor_item dos itens comprados
-ultimo_valor       = preco_unidade_base do item com comprado_em mais recente
-valor_medio        = soma_precos ÷ quantidade_compras
-
+valor_item = quantidade × valor_unitario (arredondar para centavos)
+valor_total = soma dos valor_item dos itens comprados
+ultimo_valor = preco_unidade_base do item com comprado_em mais recente
+valor_medio = soma_precos ÷ quantidade_compras
 
 Fatores: `L`, `kg`, `un` = 1 · `ml` = 0,001 · `g` = 0,001.
 

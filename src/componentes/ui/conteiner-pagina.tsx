@@ -16,19 +16,9 @@ const larguras = {
 
 // Envolve o conteúdo de uma página com padding e largura máxima.
 // Centraliza no desktop e mantém respiro nas laterais no mobile.
-export function ConteinerPagina({
-  children,
-  largura = "padrao",
-  className,
-}: Props) {
+export function ConteinerPagina({ children, largura = "padrao", className }: Props) {
   return (
-    <div
-      className={cn(
-        "mx-auto w-full px-4 py-6 sm:px-6",
-        larguras[largura],
-        className,
-      )}
-    >
+    <div className={cn("mx-auto w-full px-4 py-6 sm:px-6", larguras[largura], className)}>
       {children}
     </div>
   );

@@ -43,10 +43,7 @@ export async function exigirDonoDoSupermercado(
   }
 }
 
-export async function exigirDonoDoTipoLista(
-  usuarioId: string,
-  tipoListaId: string,
-): Promise<void> {
+export async function exigirDonoDoTipoLista(usuarioId: string, tipoListaId: string): Promise<void> {
   const encontrado = await prisma.tipoLista.findFirst({
     where: { id: tipoListaId, usuarioId },
     select: { id: true },
@@ -57,10 +54,7 @@ export async function exigirDonoDoTipoLista(
   }
 }
 
-export async function exigirDonoDoProduto(
-  usuarioId: string,
-  produtoId: string,
-): Promise<void> {
+export async function exigirDonoDoProduto(usuarioId: string, produtoId: string): Promise<void> {
   const encontrado = await prisma.produto.findFirst({
     where: { id: produtoId, usuarioId },
     select: { id: true },

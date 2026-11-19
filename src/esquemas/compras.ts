@@ -2,10 +2,9 @@ import { z } from "zod";
 import { centavosSchema, quantidadeSchema, textoOpcionalSchema, uuidSchema } from "./comum";
 import { unidadeSchema } from "./unidade";
 
-export const situacaoCompraSchema = z.enum(
-  ["em_montagem", "em_aberto", "finalizada"],
-  { error: "Situação de compra inválida." },
-);
+export const situacaoCompraSchema = z.enum(["em_montagem", "em_aberto", "finalizada"], {
+  error: "Situação de compra inválida.",
+});
 
 export const situacaoItemSchema = z.enum(["pendente", "comprado"], {
   error: "Situação de item inválida.",

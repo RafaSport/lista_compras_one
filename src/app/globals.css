@@ -90,16 +90,16 @@
   /* Neutros para texto de apoio */
   --muted: oklch(0.27 0.018 165);
   --muted-foreground: oklch(0.68 0.015 165);
-  --accent: oklch(0.30 0.022 165);
+  --accent: oklch(0.3 0.022 165);
   --accent-foreground: oklch(0.96 0.005 165);
 
   /* Feedback */
-  --destructive: oklch(0.62 0.20 25);
+  --destructive: oklch(0.62 0.2 25);
   --destructive-foreground: oklch(0.98 0.005 25);
   --success: oklch(0.72 0.15 162);
   --success-foreground: oklch(0.16 0.012 165);
   --warning: oklch(0.78 0.14 80);
-  --warning-foreground: oklch(0.20 0.02 80);
+  --warning-foreground: oklch(0.2 0.02 80);
   --info: oklch(0.68 0.12 240);
   --info-foreground: oklch(0.16 0.012 240);
 
@@ -109,9 +109,9 @@
   --ring: oklch(0.72 0.15 162 / 55%);
 
   /* Sidebar um pouco mais escura que o fundo */
-  --sidebar: oklch(0.13 0.010 165);
+  --sidebar: oklch(0.13 0.01 165);
   --sidebar-foreground: oklch(0.92 0.006 165);
-  --sidebar-accent: oklch(0.24 0.020 165);
+  --sidebar-accent: oklch(0.24 0.02 165);
   --sidebar-accent-foreground: oklch(0.96 0.005 165);
   --sidebar-border: oklch(1 0 0 / 10%);
 }

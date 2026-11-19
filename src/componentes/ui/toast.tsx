@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { cn } from "@/app/lib/utilitarios";
 
@@ -65,7 +58,7 @@ export function ProvedorToast({ children }: { children: ReactNode }) {
       <div
         aria-live="polite"
         aria-atomic="false"
-        className="pointer-events-none fixed bottom-4 right-4 z-50 flex w-full max-w-sm flex-col gap-2"
+        className="pointer-events-none fixed right-4 bottom-4 z-50 flex w-full max-w-sm flex-col gap-2"
       >
         {avisos.map((aviso) => (
           <ItemToast key={aviso.id} aviso={aviso} aoFechar={remover} />
@@ -76,13 +69,7 @@ export function ProvedorToast({ children }: { children: ReactNode }) {
 }
 
 // Cada aviso se remove sozinho depois de alguns segundos
-function ItemToast({
-  aviso,
-  aoFechar,
-}: {
-  aviso: Aviso;
-  aoFechar: (id: number) => void;
-}) {
+function ItemToast({ aviso, aoFechar }: { aviso: Aviso; aoFechar: (id: number) => void }) {
   useEffect(() => {
     const timer = setTimeout(() => aoFechar(aviso.id), DURACAO_MS);
     return () => clearTimeout(timer);
