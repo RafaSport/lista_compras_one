@@ -25,6 +25,14 @@ describe("repositório de supermercados", () => {
     expect(await listarSupermercados(banco)).toEqual([criado]);
   });
 
+  it("mantém supermercado ativo na listagem mesmo com carimbo de sincronização", async () => {
+    const supermercado = await criarSupermercado(banco, { nome: "Mercado do Bairro" });
+    const atualizado = { ...supermercado, excluido_em: "2026-01-02T00:00:00.000Z" };
+    await banco.supermercados.put(atualizado);
+
+    expect(await listarSupermercados(banco)).toEqual([atualizado]);
+  });
+
   it("desativa o supermercado com histórico sem apagar a referência", async () => {
     const supermercado = await criarSupermercado(banco, { nome: "Mercado Central" });
     await banco.compras.add({

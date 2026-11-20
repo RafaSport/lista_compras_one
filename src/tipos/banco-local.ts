@@ -107,6 +107,7 @@ export type EstadoSincronizacao = "pendente" | "sincronizado";
 export interface ControleSincronizacao {
   versao: number;
   estado_sincronizacao: EstadoSincronizacao;
+  /** Data do evento lógico enviada pelo controle de sincronização. */
   excluido_em: string | null;
   atualizado_em: string;
 }
@@ -114,6 +115,7 @@ export interface ControleSincronizacao {
 export interface CadastroLocal extends ControleSincronizacao {
   id: string;
   criado_em: string;
+  /** Estado de negócio que define se o cadastro pode ser usado. */
   ativo: boolean;
 }
 

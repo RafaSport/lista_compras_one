@@ -6,7 +6,11 @@ import type {
   Identificador,
   Supermercado,
 } from "../../tipos/banco-local";
-import { atualizarControleSincronizacao, novoControleSincronizacao } from "../controle";
+import {
+  atualizarControleSincronizacao,
+  novoControleSincronizacao,
+  registrarExclusaoSincronizacao,
+} from "../controle";
 import type { BancoLocal } from "../esquema";
 
 /** Repositório Dexie de supermercados, com desativação quando há compras vinculadas (RN13). */
@@ -29,9 +33,7 @@ export async function criarSupermercado(
 }
 
 export async function listarSupermercados(banco: BancoLocal): Promise<Supermercado[]> {
-  return (await banco.supermercados.toArray()).filter(
-    (item) => item.ativo && item.excluido_em === null,
-  );
+  return (await banco.supermercados.toArray()).filter((item) => item.ativo);
 }
 
 export async function atualizarSupermercado(
@@ -66,8 +68,7 @@ export async function excluirSupermercado(
       await banco.supermercados.put({
         ...atual,
         ativo: false,
-        excluido_em: agora,
-        ...atualizarControleSincronizacao(atual, agora),
+        ...registrarExclusaoSincronizacao(atual, agora),
       });
       return;
     }

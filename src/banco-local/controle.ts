@@ -23,3 +23,17 @@ export function atualizarControleSincronizacao<T extends ControleSincronizacao>(
     atualizado_em: agora,
   };
 }
+
+/** Registra o carimbo de exclusão junto com a alteração pendente de sincronização. */
+export function registrarExclusaoSincronizacao<T extends ControleSincronizacao>(
+  registro: T,
+  agora: string,
+): Pick<
+  ControleSincronizacao,
+  "versao" | "estado_sincronizacao" | "atualizado_em" | "excluido_em"
+> {
+  return {
+    ...atualizarControleSincronizacao(registro, agora),
+    excluido_em: agora,
+  };
+}

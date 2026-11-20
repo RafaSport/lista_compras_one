@@ -25,6 +25,15 @@ describe("repositório de produtos", () => {
     expect(await listarProdutos(banco)).toEqual([produto]);
   });
 
+  it("mantém produto ativo na listagem mesmo com carimbo de sincronização", async () => {
+    const produto = await criarProduto(banco, { nome: "Feijão", tipoMedida: "peso" });
+    await banco.produtos.put({ ...produto, excluido_em: "2026-01-02T00:00:00.000Z" });
+
+    expect(await listarProdutos(banco)).toEqual([
+      { ...produto, excluido_em: "2026-01-02T00:00:00.000Z" },
+    ]);
+  });
+
   it("desativa o produto com itens de compra e conserva o histórico", async () => {
     const produto = await criarProduto(banco, { nome: "Arroz", tipoMedida: "peso" });
     await banco.itens_compra.add({
@@ -47,7 +56,10 @@ describe("repositório de produtos", () => {
       excluido_em: null,
     });
     await excluirProduto(banco, { id: produto.id });
-    expect(await banco.produtos.get(produto.id)).toMatchObject({ ativo: false });
+    expect(await banco.produtos.get(produto.id)).toMatchObject({
+      ativo: false,
+      excluido_em: expect.any(String),
+    });
     expect(await banco.itens_compra.get("item-1")).toBeDefined();
   });
 });

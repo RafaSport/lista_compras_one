@@ -6,7 +6,11 @@ import type {
   Identificador,
   TipoLista,
 } from "../../tipos/banco-local";
-import { atualizarControleSincronizacao, novoControleSincronizacao } from "../controle";
+import {
+  atualizarControleSincronizacao,
+  novoControleSincronizacao,
+  registrarExclusaoSincronizacao,
+} from "../controle";
 import type { BancoLocal } from "../esquema";
 
 /** Repositório Dexie de tipos de lista; preserva compras históricas (RN13, P1). */
@@ -28,9 +32,7 @@ export async function criarTipoLista(
 }
 
 export async function listarTiposLista(banco: BancoLocal): Promise<TipoLista[]> {
-  return (await banco.tipos_lista.toArray()).filter(
-    (item) => item.ativo && item.excluido_em === null,
-  );
+  return (await banco.tipos_lista.toArray()).filter((item) => item.ativo);
 }
 
 export async function atualizarTipoLista(
@@ -61,8 +63,7 @@ export async function excluirTipoLista(banco: BancoLocal, entrada: Identificador
       await banco.tipos_lista.put({
         ...atual,
         ativo: false,
-        excluido_em: agora,
-        ...atualizarControleSincronizacao(atual, agora),
+        ...registrarExclusaoSincronizacao(atual, agora),
       });
       return;
     }

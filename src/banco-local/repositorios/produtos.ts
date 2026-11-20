@@ -2,7 +2,11 @@
 import { produtoSchema } from "../../esquemas/cadastros";
 import { unidadeCompativel } from "../../esquemas/unidade";
 import type { Atualizacao, DadosProduto, Identificador, Produto } from "../../tipos/banco-local";
-import { atualizarControleSincronizacao, novoControleSincronizacao } from "../controle";
+import {
+  atualizarControleSincronizacao,
+  novoControleSincronizacao,
+  registrarExclusaoSincronizacao,
+} from "../controle";
 import type { BancoLocal } from "../esquema";
 
 /** Repositório Dexie de produtos genéricos, com desativação se houver compras (RN06, RN13). */
@@ -22,7 +26,7 @@ export async function criarProduto(banco: BancoLocal, entrada: DadosProduto): Pr
 }
 
 export async function listarProdutos(banco: BancoLocal): Promise<Produto[]> {
-  return (await banco.produtos.toArray()).filter((item) => item.ativo && item.excluido_em === null);
+  return (await banco.produtos.toArray()).filter((item) => item.ativo);
 }
 
 export async function atualizarProduto(
@@ -79,8 +83,7 @@ export async function excluirProduto(banco: BancoLocal, entrada: Identificador):
       await banco.produtos.put({
         ...atual,
         ativo: false,
-        excluido_em: agora,
-        ...atualizarControleSincronizacao(atual, agora),
+        ...registrarExclusaoSincronizacao(atual, agora),
       });
       return;
     }

@@ -25,6 +25,14 @@ describe("repositório de tipos de lista", () => {
     expect(await listarTiposLista(banco)).toEqual([criado]);
   });
 
+  it("mantém tipo ativo na listagem mesmo com carimbo de sincronização", async () => {
+    const tipo = await criarTipoLista(banco, { nome: "Higiene" });
+    const atualizado = { ...tipo, excluido_em: "2026-01-02T00:00:00.000Z" };
+    await banco.tipos_lista.put(atualizado);
+
+    expect(await listarTiposLista(banco)).toEqual([atualizado]);
+  });
+
   it("desativa um tipo vinculado a uma compra", async () => {
     const tipo = await criarTipoLista(banco, { nome: "Alimentação" });
     await banco.compras.add({
@@ -43,7 +51,10 @@ describe("repositório de tipos de lista", () => {
       excluido_em: null,
     });
     await excluirTipoLista(banco, { id: tipo.id });
-    expect(await banco.tipos_lista.get(tipo.id)).toMatchObject({ ativo: false });
+    expect(await banco.tipos_lista.get(tipo.id)).toMatchObject({
+      ativo: false,
+      excluido_em: expect.any(String),
+    });
   });
 
   it("remove tipo e itens padrão quando não há compras", async () => {

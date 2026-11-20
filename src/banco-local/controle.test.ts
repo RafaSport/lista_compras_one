@@ -2,7 +2,11 @@
 
 import { describe, expect, it } from "vitest";
 
-import { atualizarControleSincronizacao, novoControleSincronizacao } from "./controle";
+import {
+  atualizarControleSincronizacao,
+  novoControleSincronizacao,
+  registrarExclusaoSincronizacao,
+} from "./controle";
 
 describe("controle de sincronização", () => {
   it("inicia novos registros na primeira versão e pendentes", () => {
@@ -20,6 +24,17 @@ describe("controle de sincronização", () => {
       versao: 2,
       estado_sincronizacao: "pendente",
       atualizado_em: "2026-01-02T00:00:00.000Z",
+    });
+  });
+
+  it("registra a exclusão lógica como metadado pendente de sincronização", () => {
+    const controle = novoControleSincronizacao("2026-01-01T00:00:00.000Z");
+
+    expect(registrarExclusaoSincronizacao(controle, "2026-01-02T00:00:00.000Z")).toEqual({
+      versao: 2,
+      estado_sincronizacao: "pendente",
+      atualizado_em: "2026-01-02T00:00:00.000Z",
+      excluido_em: "2026-01-02T00:00:00.000Z",
     });
   });
 });
