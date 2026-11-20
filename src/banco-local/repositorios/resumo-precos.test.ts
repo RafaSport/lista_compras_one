@@ -5,7 +5,11 @@ import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { BancoLocal } from "../esquema";
-import { obterSupermercadoMaisEmConta, reconstruirResumoPreco } from "./resumo-precos";
+import {
+  listarResumoPrecos,
+  obterSupermercadoMaisEmConta,
+  reconstruirResumoPreco,
+} from "./resumo-precos";
 
 let banco: BancoLocal;
 
@@ -114,6 +118,9 @@ describe("repositório de resumo_precos", () => {
       soma_precos: 180,
       quantidade_compras: 1,
     });
+    await expect(listarResumoPrecos(banco, { produtoId: "produto-1" })).resolves.toMatchObject([
+      { ultimo_valor: 180, valor_medio: 180 },
+    ]);
   });
 
   it("escolhe o menor preço médio entre supermercados", async () => {
@@ -176,6 +183,6 @@ describe("repositório de resumo_precos", () => {
 
     expect(
       await obterSupermercadoMaisEmConta(banco, { produtoId: "produto-1", unidadeBase: "L" }),
-    ).toMatchObject({ supermercado_id: "mercado-2", ultimo_valor: 180 });
+    ).toMatchObject({ supermercado_id: "mercado-2", ultimo_valor: 180, valor_medio: 180 });
   });
 });

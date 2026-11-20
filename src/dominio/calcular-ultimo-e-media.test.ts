@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
 
-import { calcularUltimoEMedia } from "./calcular-ultimo-e-media";
+import { calcularUltimoEMedia, calcularValorMedio } from "./calcular-ultimo-e-media";
+
+describe("calcularValorMedio", () => {
+  it("retorna null quando não há valores", () => {
+    expect(calcularValorMedio(0, 0)).toBeNull();
+  });
+
+  it("arredonda a média para centavos inteiros", () => {
+    expect(calcularValorMedio(301, 2)).toBe(151);
+  });
+});
 
 describe("calcularUltimoEMedia", () => {
   it("retorna null quando não há histórico", () => {

@@ -167,6 +167,8 @@ erDiagram
 | `soma_precos`        | inteiro (centavos)* | Soma de todos os `preco_unidade_base` registrados.         |
 | `quantidade_compras` | inteiro             | Quantas vezes o produto foi comprado naquele supermercado. |
 
+> A média não é persistida. É derivada de `soma_precos ÷ quantidade_compras` na leitura, para evitar dessincronização quando soma ou quantidade mudarem. O RN02 descreve o valor exibido, não o armazenado.
+
 - Valor persistido: inteiro (centavos); cálculo interno usa precisão total, sem arredondar.
 
 ### 4.8 `usuarios` (somente no servidor)

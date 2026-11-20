@@ -12,6 +12,13 @@ export interface UltimoEMedia {
   valorMedio: number;
 }
 
+/** Calcula a média simples em centavos a partir da soma e da quantidade. */
+export function calcularValorMedio(soma: number, quantidade: number): number | null {
+  if (quantidade <= 0) return null;
+
+  return Math.round(soma / quantidade);
+}
+
 /**
  * Calcula o último valor e o valor médio por produto + supermercado (RN02).
  *
@@ -31,8 +38,8 @@ export function calcularUltimoEMedia(itens: ItemHistorico[]): UltimoEMedia | nul
 
   const soma = itens.reduce((total, item) => total + item.precoUnidadeBase, 0);
 
-  return {
-    ultimoValor: maisRecente.precoUnidadeBase,
-    valorMedio: Math.round(soma / itens.length),
-  };
+  const valorMedio = calcularValorMedio(soma, itens.length);
+  if (valorMedio === null) return null;
+
+  return { ultimoValor: maisRecente.precoUnidadeBase, valorMedio };
 }

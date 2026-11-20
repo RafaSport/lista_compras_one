@@ -1,5 +1,5 @@
 /** Mantém o cache de preços derivado do histórico local. */
-import { calcularUltimoEMedia } from "../../dominio/calcular-ultimo-e-media";
+import { calcularUltimoEMedia, calcularValorMedio } from "../../dominio/calcular-ultimo-e-media";
 import { compararSupermercados } from "../../dominio/comparar-supermercados";
 import type {
   ComparacaoDePrecoProduto,
@@ -7,6 +7,7 @@ import type {
   ItemCompra,
   PrecoDoProdutoNoSupermercado,
   ResumoPreco,
+  ResumoPrecoComMedia,
 } from "../../tipos/banco-local";
 import { atualizarControleSincronizacao, novoControleSincronizacao } from "../controle";
 import type { BancoLocal } from "../esquema";
@@ -89,14 +90,23 @@ export async function reconstruirResumoPreco(
 export async function listarResumoPrecos(
   banco: BancoLocal,
   entrada: ItensPorProduto,
-): Promise<ResumoPreco[]> {
-  return banco.resumo_precos.where("produto_id").equals(entrada.produtoId).toArray();
+): Promise<ResumoPrecoComMedia[]> {
+  const resumos = await banco.resumo_precos.where("produto_id").equals(entrada.produtoId).toArray();
+
+  return resumos.map((resumo) => {
+    const valorMedio = calcularValorMedio(resumo.soma_precos, resumo.quantidade_compras);
+    if (valorMedio === null) {
+      throw new Error("O resumo de preços precisa ter ao menos uma compra.");
+    }
+
+    return { ...resumo, valor_medio: valorMedio };
+  });
 }
 
 export async function obterSupermercadoMaisEmConta(
   banco: BancoLocal,
   entrada: ComparacaoDePrecoProduto,
-): Promise<ResumoPreco | null> {
+): Promise<ResumoPrecoComMedia | null> {
   const resumos = await listarResumoPrecos(banco, { produtoId: entrada.produtoId });
   const comparaveis = resumos.filter((resumo) => resumo.unidade_base === entrada.unidadeBase);
   const precos = await Promise.all(
@@ -119,5 +129,10 @@ export async function obterSupermercadoMaisEmConta(
   const escolhido = compararSupermercados(
     precos.filter((preco): preco is NonNullable<typeof preco> => preco !== null),
   );
-  return comparaveis.find((resumo) => resumo.supermercado_id === escolhido?.supermercadoId) ?? null;
+  const resumoEscolhido = comparaveis.find(
+    (resumo) => resumo.supermercado_id === escolhido?.supermercadoId,
+  );
+  return resumoEscolhido && escolhido
+    ? { ...resumoEscolhido, valor_medio: escolhido.valorMedio }
+    : null;
 }

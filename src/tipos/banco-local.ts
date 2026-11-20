@@ -184,6 +184,11 @@ export interface ResumoPreco extends ControleSincronizacao {
   quantidade_compras: number;
 }
 
+/** Resumo de preços com média derivada para leitura, sem persistir o campo. */
+export interface ResumoPrecoComMedia extends ResumoPreco {
+  valor_medio: number;
+}
+
 export interface OperacaoSincronizacao extends ControleSincronizacao {
   id: string;
   compra_id: string;
