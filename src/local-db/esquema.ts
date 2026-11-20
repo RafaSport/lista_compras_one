@@ -26,6 +26,12 @@ export const ESQUEMA_INICIAL = {
   fila_sincronizacao: "id,&compra_id,estado,criada_em,atualizado_em",
 } as const;
 
+/** Atualiza somente a tabela que recebeu o índice criado_em. */
+const ESQUEMA_VERSAO_2 = {
+  compras:
+    "id,situacao,supermercado_id,tipo_lista_id,[supermercado_id+tipo_lista_id],salva_em,atualizado_em,criada_em",
+} as const;
+
 export class BancoLocal extends Dexie {
   supermercados!: Table<Supermercado, string>;
   tipos_lista!: Table<TipoLista, string>;
@@ -39,5 +45,6 @@ export class BancoLocal extends Dexie {
   constructor(nome: string) {
     super(nome);
     this.version(1).stores(ESQUEMA_INICIAL);
+    this.version(2).stores(ESQUEMA_VERSAO_2);
   }
 }

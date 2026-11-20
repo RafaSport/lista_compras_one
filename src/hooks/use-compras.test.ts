@@ -33,7 +33,6 @@ describe("useCompras", () => {
   it("retorna as compras e a compra correspondente ao id", async () => {
     const compra = await repositorio.criarCompra(banco, { supermercadoId, tipoListaId });
     const outra = await repositorio.criarCompra(banco, { supermercadoId, tipoListaId });
-    vi.spyOn(repositorio, "listarCompras").mockResolvedValue([compra, outra]);
     const { result } = renderHook(() => useCompras(usuarioId, compra.id));
     expect(result.current.carregando).toBe(true);
     await waitFor(() => expect(result.current.compra?.id).toBe(compra.id));
