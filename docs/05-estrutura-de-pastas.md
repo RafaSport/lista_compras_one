@@ -38,21 +38,23 @@ lista-compras-novo/
     │       ├── cadastro/
     │       ├── compras/
     │       └── sincronizacao/
-    ├── componentes/                   Peças visuais em React
+    ├── components/                  Peças visuais em React
     │   ├── ui/                        Peças base do shadcn/ui
     │   ├── layout/                    Barra inferior, cabeçalhos e estruturas de tela
-    │   ├── compras/
-    │   ├── historico/
-    │   └── cadastros/
-    ├── dominio/                       Regras de negócio puras (cálculos)
-    ├── banco-local/                   Dexie: banco do aparelho
-    │   └── repositorios/              Funções de cadastrar, listar, editar e excluir
-    ├── esquemas/                      Validações com Zod
-    ├── tipos/                         Tipos TypeScript compartilhados
-    ├── ganchos/                       Hooks do React
-    ├── sincronizacao/                 Lado do aparelho: fila, envio e download
-    ├── servidor/                      Código que roda só no servidor (Prisma, Auth.js)
-    └── utilitarios/                   Funções auxiliares (dinheiro, datas, UUID)
+    │   ├── purchases/
+    │   ├── history/
+    │   ├── registrations/
+    │   ├── states/                    Estados de interface (carregando, erro e vazio)
+    │   └── forms/                     Campos e formulários
+    ├── domain/                       Regras de negócio puras (cálculos)
+    ├── local-db/                   Dexie: banco do aparelho
+    │   └── repositories/              Funções de cadastrar, listar, editar e excluir
+    ├── schemas/                      Validações com Zod
+    ├── types/                         Tipos TypeScript compartilhados
+    ├── hooks/                       Hooks do React
+    ├── sync/                 Lado do aparelho: fila, envio e download
+    ├── server/                      Código que roda só no servidor (Prisma, Auth.js)
+    └── utils/                   Funções auxiliares (dinheiro, datas, UUID)
 ```
 
 **Sobre os nomes entre parênteses e colchetes**
@@ -65,53 +67,53 @@ lista-compras-novo/
 
 ## 2. O que cada pasta guarda
 
-| Pasta            | Guarda                             | Regra                                                                                                                                            |
-| ---------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `app`            | Rotas e composição das telas       | Telas **finas**: montam componentes e chamam ganchos. Sem cálculo de preço e sem acesso direto ao Dexie ou ao Prisma.                            |
-| `componentes`    | Peças visuais                      | Não conhecem Dexie nem Prisma. Recebem dados por props ou por ganchos.                                                                           |
-| `componentes/ui` | Peças base (botão, diálogo, campo) | Geradas pelo shadcn/ui. Evitar editar muito.                                                                                                     |
-| `dominio`        | Regras de negócio                  | Funções **puras**, sem React, Dexie ou Prisma: conversão de unidades, preço por unidade base, último valor, média e total. Testadas com Vitest.  |
-| `banco-local`    | Banco do aparelho (Dexie)          | Definição das tabelas e **repositórios**. As telas nunca falam com o Dexie diretamente.                                                          |
-| `esquemas`       | Validações Zod                     | O mesmo esquema valida o formulário e a API.                                                                                                     |
-| `tipos`          | Tipos TypeScript                   | Unidades, situações da compra e do item, entidades.                                                                                              |
-| `ganchos`        | Hooks React                        | Ligam as telas ao banco local, com leitura reativa.                                                                                              |
-| `sincronizacao`  | Envio e download                   | Fila de compras pendentes, `Salvar no banco` e carga em aparelho novo.                                                                           |
-| `servidor`       | Código só do servidor              | Prisma, Auth.js e regras da API. **Nunca** importado por componente do cliente. Usar `import "server-only"` nos arquivos.                        |
-| `utilitarios`    | Funções auxiliares                 | Formatar dinheiro e datas, gerar UUID. Também guarda o `cn.ts`, que reexporta a função `cn` (junção de classes do Tailwind) para o nosso código. |
-| `prisma`         | Esquema do banco                   | `schema.prisma` e migrações.                                                                                                                     |
+| Pasta           | Guarda                             | Regra                                                                                                                                           |
+| --------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app`           | Rotas e composição das telas       | Telas **finas**: montam components e chamam hooks. Sem cálculo de preço e sem acesso direto ao Dexie ou ao Prisma.                              |
+| `components`    | Peças visuais                      | Não conhecem Dexie nem Prisma. Recebem dados por props ou por hooks.                                                                            |
+| `components/ui` | Peças base (botão, diálogo, campo) | Geradas pelo shadcn/ui. Evitar editar muito.                                                                                                    |
+| `domain`        | Regras de negócio                  | Funções **puras**, sem React, Dexie ou Prisma: conversão de unidades, preço por unidade base, último valor, média e total. Testadas com Vitest. |
+| `local-db`      | Banco do aparelho (Dexie)          | Definição das tabelas e **repositórios**. As telas nunca falam com o Dexie diretamente.                                                         |
+| `schemas`       | Validações Zod                     | O mesmo esquema valida o formulário e a API.                                                                                                    |
+| `types`         | Tipos TypeScript                   | Unidades, situações da compra e do item, entidades.                                                                                             |
+| `hooks`         | Hooks React                        | Ligam as telas ao banco local, com leitura reativa.                                                                                             |
+| `sync`          | Envio e download                   | Fila de compras pendentes, `Salvar no banco` e carga em aparelho novo.                                                                          |
+| `server`        | Código só do servidor              | Prisma, Auth.js e regras da API. **Nunca** importado por componente do cliente. Usar `import "server-only"` nos arquivos.                       |
+| `utils`         | Funções auxiliares                 | Pasta prevista para helpers de dinheiro, datas e UUID. O `cn` está em `src/app/lib/utilitarios.ts`.                                             |
+| `prisma`        | Esquema do banco                   | `schema.prisma` e migrações.                                                                                                                    |
 
 ---
 
 ## 3. Quem pode importar quem
 
-| Pasta           | Pode importar de                                                     |
-| --------------- | -------------------------------------------------------------------- |
-| `tipos`         | Ninguém                                                              |
-| `dominio`       | `tipos`                                                              |
-| `utilitarios`   | `tipos`                                                              |
-| `esquemas`      | `tipos`, `dominio`                                                   |
-| `banco-local`   | `tipos`, `dominio`, `utilitarios`                                    |
-| `sincronizacao` | `banco-local`, `esquemas`, `tipos`                                   |
-| `ganchos`       | `banco-local`, `sincronizacao`, `dominio`, `tipos`, `utilitarios`    |
-| `componentes`   | `ganchos`, `dominio`, `utilitarios`, `tipos`                         |
-| `servidor`      | `tipos`, `esquemas`, `dominio`                                       |
-| `app`           | Todas, exceto que **componentes do cliente** não importam `servidor` |
+| Pasta        | Pode importar de                                                   |
+| ------------ | ------------------------------------------------------------------ |
+| `types`      | Ninguém                                                            |
+| `domain`     | `types`                                                            |
+| `utils`      | `types`                                                            |
+| `schemas`    | `types`, `domain`                                                  |
+| `local-db`   | `types`, `domain`, `utils`                                         |
+| `sync`       | `local-db`, `schemas`, `types`                                     |
+| `hooks`      | `local-db`, `sync`, `domain`, `types`, `utils`                     |
+| `components` | `hooks`, `domain`, `utils`, `types`                                |
+| `server`     | `types`, `schemas`, `domain`                                       |
+| `app`        | Todas, exceto que **componentes do cliente** não importam `server` |
 
-A ideia é que a regra "desce": telas dependem de componentes, que dependem de ganchos, que dependem de dados e regras. O `dominio` fica no fundo e não depende de nada que seja de React ou de banco, o que permite testar os cálculos sozinhos.
+A ideia é que a regra "desce": telas dependem de components, que dependem de hooks, que dependem de dados e regras. O `domain` fica no fundo e não depende de nada que seja de React ou de banco, o que permite testar os cálculos sozinhos.
 
 ---
 
 ## 4. Convenções de nomes
 
-| Item                | Padrão                                                                 | Exemplo                               |
-| ------------------- | ---------------------------------------------------------------------- | ------------------------------------- |
-| Idioma              | Português para pastas, arquivos, funções, variáveis, atributos e tipos | `calcularPrecoPorUnidadeBase`         |
-| Pastas              | minúsculas, com hífen quando houver mais de uma palavra                | `banco-local`, `tipos-lista`          |
-| Arquivos de lógica  | minúsculas com hífen                                                   | `calcular-preco-unidade-base.ts`      |
-| Componentes React   | PascalCase, no mesmo nome do arquivo                                   | `CartaoItemCompra.tsx`                |
-| Funções e variáveis | camelCase, funções com verbo no infinitivo                             | `finalizarCompra`, `valorTotal`       |
-| Tipos               | PascalCase                                                             | `ItemCompra`, `SituacaoCompra`        |
-| Testes              | `nome.test.ts` ao lado do arquivo testado                              | `calcular-preco-unidade-base.test.ts` |
+| Item                | Padrão                                                                         | Exemplo                               |
+| ------------------- | ------------------------------------------------------------------------------ | ------------------------------------- |
+| Idioma              | Pastas em inglês; arquivos, funções, variáveis, atributos e tipos em português | `calcularPrecoPorUnidadeBase`         |
+| Pastas              | minúsculas, com hífen quando houver mais de uma palavra                        | `local-db`, `tipos-lista`             |
+| Arquivos de lógica  | minúsculas com hífen                                                           | `calcular-preco-unidade-base.ts`      |
+| Componentes React   | PascalCase, no mesmo nome do arquivo                                           | `CartaoItemCompra.tsx`                |
+| Funções e variáveis | camelCase, funções com verbo no infinitivo                                     | `finalizarCompra`, `valorTotal`       |
+| Tipos               | PascalCase                                                                     | `ItemCompra`, `SituacaoCompra`        |
+| Testes              | `nome.test.ts` ao lado do arquivo testado                                      | `calcular-preco-unidade-base.test.ts` |
 
 **Exceção obrigatória:** os arquivos especiais do Next.js têm nome fixo em inglês e não podem ser traduzidos: `page.tsx`, `layout.tsx`, `route.ts`, `loading.tsx`, `error.tsx` e `not-found.tsx`.
 
@@ -119,13 +121,13 @@ A ideia é que a regra "desce": telas dependem de componentes, que dependem de g
 
 ## 5. Ajustes previstos nos próximos passos
 
-| Passo       | O que acontece com a estrutura                                                                                                                                                                                                                                                                                                         |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 2.3 (feito) | O shadcn/ui foi configurado para gerar as peças em `src/componentes/ui`, e a função auxiliar `cn` (junção de classes do Tailwind) ficou em `src/utilitarios/cn.ts`, que apenas reexporta a função `cn` do pacote `cn`, instalado pelo shadcn. Os arquivos gerados pelo shadcn mantêm nomes em inglês, porque são atualizados pelo CLI. |
-| 2.4 (feito) | Entraram os arquivos `.prettierrc.json` e `.prettierignore` na raiz e os scripts `formatar`, `formatar:verificar`, `tipos` e `verificar` no `package.json`.                                                                                                                                                                            |
-| 4.1         | A página inicial padrão do Next (`src/app/page.tsx`) será removida e substituída por `src/app/(protegido)/page.tsx`, para não haver duas páginas na rota `/`. O layout com a barra inferior entra em `(protegido)/layout.tsx`.                                                                                                         |
-| 7.1         | O esquema do Prisma entra em `prisma/`.                                                                                                                                                                                                                                                                                                |
-| 7.3         | O arquivo de proteção de rotas fica diretamente em `src/` (`middleware.ts` ou `proxy.ts`, conforme a versão do Next).                                                                                                                                                                                                                  |
-| 9.1         | Ícones e manifest do PWA entram em `public/`.                                                                                                                                                                                                                                                                                          |
+| Passo       | O que acontece com a estrutura                                                                                                                                                                                                                                                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2.3 (feito) | O shadcn/ui foi configurado para gerar as peças em `src/components/ui`, e a função auxiliar `cn` (junção de classes do Tailwind) ficou em `src/app/lib/utilitarios.ts`, que apenas reexporta a função `cn` do pacote `cn`, instalado pelo shadcn. Os arquivos gerados pelo shadcn mantêm nomes em inglês, porque são atualizados pelo CLI. |
+| 2.4 (feito) | Entraram os arquivos `.prettierrc.json` e `.prettierignore` na raiz e os scripts `formatar`, `formatar:verificar`, `tipos` e `verificar` no `package.json`.                                                                                                                                                                                |
+| 4.1         | A página inicial padrão do Next (`src/app/page.tsx`) será removida e substituída por `src/app/(protegido)/page.tsx`, para não haver duas páginas na rota `/`. O layout com a barra inferior entra em `(protegido)/layout.tsx`.                                                                                                             |
+| 7.1         | O esquema do Prisma entra em `prisma/`.                                                                                                                                                                                                                                                                                                    |
+| 7.3         | O arquivo de proteção de rotas fica diretamente em `src/` (`middleware.ts` ou `proxy.ts`, conforme a versão do Next).                                                                                                                                                                                                                      |
+| 9.1         | Ícones e manifest do PWA entram em `public/`.                                                                                                                                                                                                                                                                                              |
 
 Os arquivos `.gitkeep` que aparecem nas pastas vazias existem só para o Git guardá-las. Podem ser apagados à medida que as pastas recebem arquivos de verdade.

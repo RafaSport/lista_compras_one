@@ -1,7 +1,7 @@
 import "server-only";
 
-import { prisma } from "@/servidor/prisma";
-import { usuarioAtual } from "@/servidor/sessao";
+import { prisma } from "@/server/prisma";
+import { usuarioAtual } from "@/server/sessao";
 
 type ContextoRota = {
   params: Promise<{ id: string }>;

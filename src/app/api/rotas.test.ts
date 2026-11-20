@@ -27,8 +27,8 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock("server-only", () => ({}));
-vi.mock("@/servidor/prisma", () => ({ prisma: mocks.prisma }));
-vi.mock("@/servidor/sessao", () => ({ usuarioAtual: mocks.usuarioAtual }));
+vi.mock("@/server/prisma", () => ({ prisma: mocks.prisma }));
+vi.mock("@/server/sessao", () => ({ usuarioAtual: mocks.usuarioAtual }));
 
 import * as compras from "./compras/route";
 import * as compraPorId from "./compras/[id]/route";

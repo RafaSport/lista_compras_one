@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { prisma } from "@/servidor/prisma";
+import { prisma } from "@/server/prisma";
 
 const credenciaisSchema = z.object({
   login: z.string().trim().min(1),

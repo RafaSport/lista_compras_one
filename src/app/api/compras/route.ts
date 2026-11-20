@@ -1,9 +1,9 @@
 import "server-only";
 
 import { Prisma } from "@prisma/client";
-import { envioCompraSchema, type EnvioCompraEntrada } from "@/esquemas/sincronizacao";
-import { prisma } from "@/servidor/prisma";
-import { usuarioAtual } from "@/servidor/sessao";
+import { envioCompraSchema, type EnvioCompraEntrada } from "@/schemas/sincronizacao";
+import { prisma } from "@/server/prisma";
+import { usuarioAtual } from "@/server/sessao";
 
 class ErroRegistroDeOutroUsuario extends Error {}
 

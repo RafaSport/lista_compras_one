@@ -1,10 +1,10 @@
 import "server-only";
 
 import { Prisma } from "@prisma/client";
-import { supermercadoSchema } from "@/esquemas/cadastros";
-import { uuidSchema } from "@/esquemas/comum";
-import { prisma } from "@/servidor/prisma";
-import { usuarioAtual } from "@/servidor/sessao";
+import { supermercadoSchema } from "@/schemas/cadastros";
+import { uuidSchema } from "@/schemas/comum";
+import { prisma } from "@/server/prisma";
+import { usuarioAtual } from "@/server/sessao";
 
 type ContextoRota = { params: Promise<{ id: string }> };
 

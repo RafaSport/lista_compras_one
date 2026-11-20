@@ -1,10 +1,10 @@
 import "server-only";
 
 import { Prisma } from "@prisma/client";
-import { produtoSchema } from "@/esquemas/cadastros";
-import { uuidSchema } from "@/esquemas/comum";
-import { prisma } from "@/servidor/prisma";
-import { usuarioAtual } from "@/servidor/sessao";
+import { produtoSchema } from "@/schemas/cadastros";
+import { uuidSchema } from "@/schemas/comum";
+import { prisma } from "@/server/prisma";
+import { usuarioAtual } from "@/server/sessao";
 
 function extrairId(corpo: unknown): string | null {
   if (typeof corpo !== "object" || corpo === null || Array.isArray(corpo)) return null;

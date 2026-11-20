@@ -60,9 +60,9 @@ Estas quebram o sistema se violadas. Não negocie, não "melhore".
    para valor monetário. R$ 9,00 é 900.
 2. O dominio é puro. Sem React, sem Dexie, sem Prisma, sem fetch. Só funções que
    recebem valores e devolvem valores.
-3. Telas não falam com o banco. app/ não importa banco-local nem servidor.
-   Sempre passa por ganchos/.
-4. servidor/ nunca chega ao cliente. Todo arquivo em servidor/ começa com
+3. Telas não falam com o banco. app/ não importa local-db nem server.
+   Sempre passa por hooks/.
+4. server/ nunca chega ao cliente. Todo arquivo em server/ começa com
    import "server-only".
 5. Um banco Dexie por usuário. Nome lista-de-compras-<usuario_id>. As tabelas
    locais não têm usuario_id.
@@ -71,7 +71,7 @@ Estas quebram o sistema se violadas. Não negocie, não "melhore".
 7. Item padrão nunca muda. Editar um item durante a compra altera só
    itens_compra. itens_lista fica intacto.
 8. Cadastro com histórico não é apagado. Vira ativo = false.
-9. Nomes em português. Pastas, arquivos, funções, variáveis, tipos.
+9. Nomes em inglês para pastas; arquivos, funções, variáveis, campos e tipos em português.
    Exceção: page.tsx, layout.tsx, route.ts, loading.tsx, error.tsx,
    not-found.tsx e os arquivos gerados pelo shadcn.
 10. Comentários e mensagens de interface em português.

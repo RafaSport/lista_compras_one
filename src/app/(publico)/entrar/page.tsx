@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { z } from "zod";
-import { Campo } from "@/componentes/formulario";
+import { Campo } from "@/components/forms";
 
 // Schema do formulário de login. Separado do schema do servidor porque aqui
 // só precisamos garantir que os campos não estão vazios.
