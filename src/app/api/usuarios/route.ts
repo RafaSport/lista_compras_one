@@ -48,8 +48,9 @@ export async function POST(requisicao: Request) {
 
   const senhaHash = await bcrypt.hash(senha, 10);
 
+  // O schema exige nome e sobrenome, então gravamos os três campos.
   await prisma.usuario.create({
-    data: { login, senhaHash },
+    data: { nome, sobrenome, login, senhaHash },
   });
 
   return NextResponse.json({ login }, { status: 201 });
