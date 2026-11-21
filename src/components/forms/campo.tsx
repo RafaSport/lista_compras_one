@@ -11,12 +11,13 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
   erro?: string;
   dica?: string;
   obrigatorio?: boolean;
+  tipo?: "text" | "password" | "email" | "number" | "tel" | "search" | "url";
 };
 
 // Campo de entrada completo: rótulo, input, dica e mensagem de erro.
 // O forwardRef é necessário para funcionar com React Hook Form.
 export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
-  { rotulo, erro, dica, obrigatorio, id, className, ...resto },
+  { rotulo, erro, dica, obrigatorio, tipo = "text", id, className, ...resto },
   ref,
 ) {
   const idGerado = useId();
@@ -36,6 +37,7 @@ export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
       <input
         ref={ref}
         id={idCampo}
+        type={tipo}
         aria-invalid={erro ? true : undefined}
         aria-describedby={descritoPor || undefined}
         className={cn(
