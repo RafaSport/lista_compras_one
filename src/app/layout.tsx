@@ -17,14 +17,17 @@ export const viewport: Viewport = {
   themeColor: "#0f172a",
 };
 
+// Layout raiz. Trava a altura na viewport (h-dvh) e esconde o overflow,
+// para nenhuma tela gerar barra de rolagem. O conteúdo interno usa flex
+// e rola apenas dentro da própria área quando for inevitável.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
-      <body className={inter.className}>
+    <html lang="pt-BR" className="h-full overflow-hidden">
+      <body className={`${inter.className} h-full overflow-hidden`}>
         <SessionProvider>
-          {/* Coluna flexível para o rodapé ficar sempre no fim da página */}
-          <div className="flex min-h-screen flex-col">
-            <div className="flex-1">{children}</div>
+          <div className="flex h-full flex-col overflow-hidden">
+            {/* Área de conteúdo. min-h-0 permite que o filho encolha e não estoure. */}
+            <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
             <Rodape />
           </div>
         </SessionProvider>

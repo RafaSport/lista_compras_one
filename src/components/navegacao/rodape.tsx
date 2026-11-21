@@ -1,10 +1,11 @@
 // Rodapé global, presente em todas as páginas.
-// O padding inferior extra evita que a barra fixa de navegação cubra o texto.
+// Sem padding inferior extra: a altura é fixa e o layout raiz controla o espaço.
+// O ano é fixo para não quebrar o prerender do Next.js 16.
 export function Rodape() {
   return (
-    <footer className="text-muted-foreground px-4 pb-20 pt-6 text-center text-xs">
+    <footer className="text-muted-foreground shrink-0 px-4 py-2 text-center text-xs">
       <p>
-        © {new Date().getFullYear()} — Feito com dedicação por{" "}
+        © 2026 — Feito com dedicação por{" "}
         <span className="text-foreground font-medium">Rafael Guedes</span>
       </p>
     </footer>

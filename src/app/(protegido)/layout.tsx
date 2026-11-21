@@ -15,12 +15,16 @@ export default async function LayoutProtegido({ children }: { children: ReactNod
   }
 
   return (
-    <div className="bg-background flex min-h-screen flex-col">
+    // h-full + overflow-hidden: a casca nunca rola.
+    // A área do main é a única que pode rolar, e só se o conteúdo exceder.
+    <div className="bg-background flex h-full flex-col overflow-hidden">
       {/* Cabeçalho fixo com o ícone pequeno no canto esquerdo */}
       <Cabecalho />
 
-      {/* Área de conteúdo. O padding inferior abre espaço para a barra fixa. */}
-      <main className="mx-auto w-full max-w-md flex-1 px-4 pb-24 pt-6">{children}</main>
+      {/* Área de conteúdo. min-h-0 permite encolher; overflow-y-auto só age se precisar. */}
+      <main className="mx-auto min-h-0 w-full max-w-md flex-1 overflow-y-auto px-4 py-4">
+        {children}
+      </main>
 
       {/* Barra de navegação inferior com os cinco atalhos do doc 02. */}
       <BarraInferior />
