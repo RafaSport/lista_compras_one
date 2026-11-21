@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Botao } from "@/components/ui/botao";
 import { Campo } from "@/components/forms/campo";
+import { Alerta } from "@/components/ui/alerta";
 
 // Tela de login (RF20). Rota pública.
 // O login é gerado como nome.sobrenome no cadastro, por isso o campo é "usuário".
@@ -35,12 +36,16 @@ export default function PaginaLogin() {
       return;
     }
 
+    // Limpa os campos antes de sair da tela.
+    setUsuario("");
+    setSenha("");
+
     router.push("/");
     router.refresh();
   }
 
   return (
-    <form onSubmit={entrar} className="space-y-4">
+    <form onSubmit={entrar} className="space-y-4" autoComplete="off">
       <Campo
         rotulo="Usuário"
         autoComplete="username"
@@ -58,19 +63,15 @@ export default function PaginaLogin() {
         required
       />
 
-      {erro && (
-        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
-          {erro}
-        </p>
-      )}
+      {erro && <Alerta variante="erro">{erro}</Alerta>}
 
       <Botao type="submit" carregando={enviando} className="w-full">
         Entrar
       </Botao>
 
-      <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+      <p className="text-muted-foreground text-center text-sm">
         Ainda não tem conta?{" "}
-        <Link href="/cadastro" className="font-medium text-slate-900 underline dark:text-slate-100">
+        <Link href="/cadastro" className="text-primary font-medium underline">
           Criar usuário
         </Link>
       </p>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Botao } from "@/components/ui/botao";
 import { Campo } from "@/components/forms/campo";
+import { Alerta } from "@/components/ui/alerta";
 
 // Tela de cadastro de usuário (RF21, RN12). Rota pública.
 // O login é gerado como nome.sobrenome. Se já existir, o servidor responde 409
@@ -15,6 +16,7 @@ export default function PaginaCadastro() {
   const [sobrenome, setSobrenome] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState<string | null>(null);
+  const [sucesso, setSucesso] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
 
   // Prévia do login que será gerado, para o usuário ver antes de enviar.
@@ -26,6 +28,7 @@ export default function PaginaCadastro() {
   async function cadastrar(evento: React.FormEvent) {
     evento.preventDefault();
     setErro(null);
+    setSucesso(null);
     setEnviando(true);
 
     const resposta = await fetch("/api/usuarios", {
@@ -46,7 +49,16 @@ export default function PaginaCadastro() {
       return;
     }
 
-    router.push("/login");
+    // Limpa os campos e mostra a mensagem de sucesso por alguns segundos
+    // antes de voltar para o login.
+    setNome("");
+    setSobrenome("");
+    setSenha("");
+    setSucesso("Usuário criado com sucesso. Redirecionando para o login...");
+
+    setTimeout(() => {
+      router.push("/login");
+    }, 2500);
   }
 
   return (
@@ -78,24 +90,22 @@ export default function PaginaCadastro() {
       />
 
       {loginPrevisto && (
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-muted-foreground text-sm">
           Seu login será <strong>{loginPrevisto}</strong>
         </p>
       )}
 
-      {erro && (
-        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
-          {erro}
-        </p>
-      )}
+      {erro && <Alerta variante="erro">{erro}</Alerta>}
+
+      {sucesso && <Alerta variante="sucesso">{sucesso}</Alerta>}
 
       <Botao type="submit" carregando={enviando} className="w-full">
         Criar usuário
       </Botao>
 
-      <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+      <p className="text-muted-foreground text-center text-sm">
         Já tem conta?{" "}
-        <Link href="/login" className="font-medium text-slate-900 underline dark:text-slate-100">
+        <Link href="/login" className="text-primary font-medium underline">
           Entrar
         </Link>
       </p>

@@ -4,18 +4,21 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/server/prisma";
 
+// Campos que o formulário de login envia. O nome precisa bater com o que a
+// tela usa em signIn("credentials", { ... }).
 const credenciaisSchema = z.object({
-  login: z.string().trim().min(1),
+  usuario: z.string().trim().min(1),
   senha: z.string().min(1),
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
-  pages: { signIn: "/entrar" },
+  // A tela de login do projeto é /login.
+  pages: { signIn: "/login" },
   providers: [
     Credentials({
       credentials: {
-        login: { label: "Login", type: "text" },
+        usuario: { label: "Usuário", type: "text" },
         senha: { label: "Senha", type: "password" },
       },
       async authorize(credenciais) {
@@ -25,24 +28,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        const { login, senha } = parsed.data;
+        const { usuario, senha } = parsed.data;
 
-        const usuario = await prisma.usuario.findUnique({
+        // O login é gravado como nome.sobrenome. Normaliza para minúsculas
+        // para o usuário não precisar acertar a caixa.
+        const login = usuario.trim().toLowerCase();
+
+        const encontrado = await prisma.usuario.findUnique({
           where: { login },
           select: { id: true, login: true, senhaHash: true },
         });
 
-        if (!usuario) {
+        if (!encontrado) {
           return null;
         }
 
-        const senhaConfere = await bcrypt.compare(senha, usuario.senhaHash);
+        const senhaConfere = await bcrypt.compare(senha, encontrado.senhaHash);
 
         if (!senhaConfere) {
           return null;
         }
 
-        return { id: usuario.id, name: usuario.login };
+        return { id: encontrado.id, name: encontrado.login };
       },
     }),
   ],
