@@ -11,7 +11,7 @@ import { tipoListaSchema } from "@/schemas/cadastros";
 import type { CorLista } from "@/types/banco-local";
 
 // Tela de criação de lista.
-// O botão Salvar só habilita quando nome e cor estão preenchidos e válidos.
+// Layout compacto: cabe sem rolagem em telas de celular.
 export default function PaginaNovaLista() {
   const { data: sessao, status } = useSession();
   const usuarioId = sessao?.user?.id ?? "";
@@ -57,7 +57,6 @@ function FormularioNovaLista({ usuarioId }: { usuarioId: string }) {
 
     try {
       await criar(validacao.data);
-      // Volta para a listagem, onde a nova lista já aparece ordenada.
       router.push("/listas");
     } catch (causa) {
       definirErro(
@@ -68,7 +67,7 @@ function FormularioNovaLista({ usuarioId }: { usuarioId: string }) {
   }
 
   return (
-    <form onSubmit={salvar} className="flex flex-col gap-4">
+    <form onSubmit={salvar} className="flex flex-col gap-3">
       {/* Cabeçalho com voltar */}
       <div className="flex items-center gap-2">
         <Link
@@ -81,11 +80,11 @@ function FormularioNovaLista({ usuarioId }: { usuarioId: string }) {
         <h1 className="text-foreground text-lg font-semibold">Nova lista</h1>
       </div>
 
-      {/* Card do formulário */}
-      <div className="border-border bg-card flex flex-col gap-4 rounded-lg border p-4">
+      {/* Card do formulário, com espaçamento reduzido */}
+      <div className="border-border bg-card flex flex-col gap-3 rounded-lg border p-3">
         <p className="text-foreground text-sm font-medium">Informações da Lista</p>
 
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1">
           <label htmlFor="nome-lista" className="text-foreground text-sm font-medium">
             Nome da Lista
           </label>
@@ -97,7 +96,7 @@ function FormularioNovaLista({ usuarioId }: { usuarioId: string }) {
             placeholder="Ex: Alimentos, Limpeza..."
             maxLength={40}
             autoComplete="off"
-            className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:border-ring h-10 rounded-md border px-3 text-sm outline-none"
+            className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:border-ring h-9 rounded-md border px-3 text-sm outline-none"
           />
         </div>
 
@@ -110,16 +109,16 @@ function FormularioNovaLista({ usuarioId }: { usuarioId: string }) {
         )}
       </div>
 
-      {/* Ações */}
-      <div className="flex flex-col gap-2">
-        <Botao type="submit" disabled={!podeSalvar} carregando={salvando}>
-          Salvar Lista
-        </Botao>
-        <Link href="/listas">
+      {/* Ações lado a lado */}
+      <div className="flex gap-2">
+        <Link href="/listas" className="flex-1">
           <Botao type="button" variante="secundario" className="w-full">
             Cancelar
           </Botao>
         </Link>
+        <Botao type="submit" disabled={!podeSalvar} carregando={salvando} className="flex-1">
+          Salvar Lista
+        </Botao>
       </div>
     </form>
   );

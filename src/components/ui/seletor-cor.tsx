@@ -11,7 +11,6 @@ type Props = {
 };
 
 // Mapa de cor salva (nome) para a classe Tailwind de fundo.
-// O valor persistido é o nome, para o tema poder mudar a paleta sem migrar dados.
 const classesCor: Record<CorLista, string> = {
   verde: "bg-emerald-500",
   azul: "bg-blue-500",
@@ -19,11 +18,9 @@ const classesCor: Record<CorLista, string> = {
   roxo: "bg-violet-500",
   vermelho: "bg-red-500",
   amarelo: "bg-amber-400",
-  ciano: "bg-cyan-500",
   rosa: "bg-pink-500",
 };
 
-// Rótulo exibido abaixo de cada círculo.
 const rotulos: Record<CorLista, string> = {
   verde: "Verde",
   azul: "Azul",
@@ -31,18 +28,21 @@ const rotulos: Record<CorLista, string> = {
   roxo: "Roxo",
   vermelho: "Vermelho",
   amarelo: "Amarelo",
-  ciano: "Ciano",
   rosa: "Rosa",
 };
 
-// Seletor de cor em grade. Cada opção é um botão com aria-pressed,
-// para leitores de tela anunciarem qual cor está selecionada.
+// Seletor de cor em grade fixa de 4 colunas.
+// Sete cores ocupam duas linhas, sem gerar rolagem em telas pequenas.
 export function SeletorCor({ valor, aoMudar, erro }: Props) {
   return (
-    <fieldset className="flex flex-col gap-2">
+    <fieldset className="flex flex-col gap-1.5">
       <legend className="text-foreground text-sm font-medium">Cor da Lista</legend>
 
-      <div role="radiogroup" aria-label="Cor da lista" className="flex flex-wrap gap-3">
+      <div
+        role="radiogroup"
+        aria-label="Cor da lista"
+        className="grid grid-cols-4 gap-x-2 gap-y-2"
+      >
         {coresLista.map((cor) => {
           const selecionada = valor === cor;
 
@@ -58,9 +58,8 @@ export function SeletorCor({ valor, aoMudar, erro }: Props) {
             >
               <span
                 className={cn(
-                  "size-8 rounded-full transition-all",
+                  "size-7 rounded-full transition-all",
                   classesCor[cor],
-                  // Anel duplo na cor selecionada, como no print.
                   selecionada
                     ? "ring-foreground ring-2 ring-offset-2 ring-offset-background"
                     : "opacity-70 hover:opacity-100",
@@ -68,7 +67,7 @@ export function SeletorCor({ valor, aoMudar, erro }: Props) {
               />
               <span
                 className={cn(
-                  "text-[10px]",
+                  "text-[10px] leading-none",
                   selecionada ? "text-foreground font-medium" : "text-muted-foreground",
                 )}
               >

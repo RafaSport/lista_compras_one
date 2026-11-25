@@ -10,7 +10,6 @@ export const coresLista = [
   "roxo",
   "vermelho",
   "amarelo",
-  "ciano",
   "rosa",
 ] as const;
 

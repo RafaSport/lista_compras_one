@@ -16,7 +16,6 @@ const classesCor: Record<CorLista, string> = {
   roxo: "bg-violet-500",
   vermelho: "bg-red-500",
   amarelo: "bg-amber-400",
-  ciano: "bg-cyan-500",
   rosa: "bg-pink-500",
 };
 

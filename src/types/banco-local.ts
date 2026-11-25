@@ -8,7 +8,6 @@ export type CorLista =
   | "roxo"
   | "vermelho"
   | "amarelo"
-  | "ciano"
   | "rosa";
 
 export interface Identificador {
