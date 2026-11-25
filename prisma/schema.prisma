@@ -83,21 +83,40 @@ model Supermercado {
   @@map("supermercados")
 }
 
-model TipoLista {
-  id           String   @id @default(uuid()) @db.Uuid
-  usuarioId    String   @map("usuario_id") @db.Uuid
-  nome         String
-  ativo        Boolean  @default(true)
-  criadoEm     DateTime @default(now()) @map("criado_em")
-  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+// Tipo de lista: categoria reutilizável (Alimentos, Limpeza...).
+model TiposLista {
+  id         String   @id @default(uuid()) @db.Uuid
+  usuario_id String   @db.Uuid
+  nome       String
+  // Cor escolhida na criação. Guarda o nome da cor (ex.: "verde"), não o hex,
+  // para o tema poder mudar a paleta sem migrar dados.
+  cor        String   @default("verde")
+  criado_em  DateTime @default(now())
 
-  usuario    Usuario     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-  itensLista ItemLista[]
-  compras    Compra[]
+  usuario Usuarios    @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  itens   ItensLista[]
 
-  @@unique([usuarioId, nome])
-  @@index([usuarioId])
+  @@unique([usuario_id, nome])
   @@map("tipos_lista")
+}
+
+// Item pertencente a um tipo de lista.
+// Independente de produtos: aqui é o que a lista deve conter, não o que foi comprado.
+model ItensLista {
+  id              String   @id @default(uuid()) @db.Uuid
+  tipo_lista_id   String   @db.Uuid
+  descricao       String
+  // Campos opcionais conforme o formulário do print.
+  categoria       String?
+  observacao      String?
+  unidade         String?
+  quantidade_padrao Decimal? @db.Decimal(10, 3)
+  criado_em       DateTime @default(now())
+
+  tipo_lista TiposLista @relation(fields: [tipo_lista_id], references: [id], onDelete: Cascade)
+
+  @@index([tipo_lista_id])
+  @@map("itens_lista")
 }
 
 model Produto {
