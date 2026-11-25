@@ -35,13 +35,13 @@ const rotulos: Record<CorLista, string> = {
 // Sete cores ocupam duas linhas, sem gerar rolagem em telas pequenas.
 export function SeletorCor({ valor, aoMudar, erro }: Props) {
   return (
-    <fieldset className="flex flex-col gap-1.5">
-      <legend className="text-foreground text-sm font-medium">Cor da Lista</legend>
+    <fieldset className="flex flex-col gap-2">
+      <legend className="text-foreground text-sm font-medium pb-2">Cor da Lista</legend>
 
       <div
         role="radiogroup"
         aria-label="Cor da lista"
-        className="grid grid-cols-4 gap-x-2 gap-y-2"
+        className="grid grid-cols-7 gap-x-2 gap-y-2"
       >
         {coresLista.map((cor) => {
           const selecionada = valor === cor;

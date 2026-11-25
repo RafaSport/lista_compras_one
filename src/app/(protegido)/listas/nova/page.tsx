@@ -67,22 +67,14 @@ function FormularioNovaLista({ usuarioId }: { usuarioId: string }) {
   }
 
   return (
-    <form onSubmit={salvar} className="flex flex-col gap-3">
+    <form onSubmit={salvar} className="flex flex-col gap-1">
       {/* Cabeçalho com voltar */}
       <div className="flex items-center gap-2">
-        <Link
-          href="/listas"
-          aria-label="Voltar para listas"
-          className="text-muted-foreground hover:text-foreground text-lg"
-        >
-          ‹
-        </Link>
-        <h1 className="text-foreground text-lg font-semibold">Nova lista</h1>
       </div>
 
       {/* Card do formulário, com espaçamento reduzido */}
       <div className="border-border bg-card flex flex-col gap-3 rounded-lg border p-3">
-        <p className="text-foreground text-sm font-medium">Informações da Lista</p>
+        <p className="text-foreground text-sm text-center font-medium">Informações da Lista Nova</p>
 
         <div className="flex flex-col gap-1">
           <label htmlFor="nome-lista" className="text-foreground text-sm font-medium">
@@ -109,14 +101,19 @@ function FormularioNovaLista({ usuarioId }: { usuarioId: string }) {
         )}
       </div>
 
-      {/* Ações lado a lado */}
+            {/* Ações lado a lado, com a mesma largura */}
       <div className="flex gap-2">
-        <Link href="/listas" className="flex-1">
+        <Link href="/listas" className="flex flex-1">
           <Botao type="button" variante="secundario" className="w-full">
             Cancelar
           </Botao>
         </Link>
-        <Botao type="submit" disabled={!podeSalvar} carregando={salvando} className="flex-1">
+        <Botao
+          type="submit"
+          disabled={!podeSalvar}
+          carregando={salvando}
+          className="flex-1"
+        >
           Salvar Lista
         </Botao>
       </div>
