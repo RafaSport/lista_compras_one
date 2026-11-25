@@ -35,8 +35,8 @@ export interface DadosTipoLista {
 
 export interface TipoLista extends CadastroLocal {
   nome: string;
-  /** Nome da cor escolhida na criação (ex.: "verde"). */
-  cor: CorLista;
+  /** Nome da cor escolhida. Registros antigos e sincronizados podem não ter o campo. */
+  cor?: CorLista;
 }
 
 export interface DadosProduto {

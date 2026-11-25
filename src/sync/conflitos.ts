@@ -46,9 +46,11 @@ export async function aplicarTipoListaRecebido(
   return banco.transaction("rw", banco.tipos_lista, async () => {
     const atual = await banco.tipos_lista.get(remoto.id);
     if (atual && atual.atualizado_em >= remoto.atualizadoEm) return atual;
-    const salvo: TipoLista = {
+        const salvo: TipoLista = {
       id: remoto.id,
       nome: remoto.nome,
+      // Preserva a cor local: o servidor ainda não envia esse campo.
+      cor: atual?.cor ?? "verde",
       ativo: remoto.ativo,
       criado_em: remoto.criadoEm,
       atualizado_em: remoto.atualizadoEm,
