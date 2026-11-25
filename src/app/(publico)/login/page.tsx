@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { Botao } from "@/components/ui/botao";
 import { Campo } from "@/components/forms/campo";
 import { Alerta } from "@/components/ui/alerta";
+import { Botao } from "@/components/ui/botao";
+import { LinkTexto } from "@/components/ui/link-texto";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 // Tela de login (RF20). Rota pública.
 // O login é gerado como nome.sobrenome no cadastro, por isso o campo é "usuário".
@@ -69,11 +69,9 @@ export default function PaginaLogin() {
         Entrar
       </Botao>
 
+      {/* Rodapé do formulário: link para a tela de cadastro. */}
       <p className="text-muted-foreground text-center text-sm">
-        Ainda não tem conta?{" "}
-        <Link href="/cadastro" className="text-primary font-medium underline">
-          Criar usuário
-        </Link>
+        Ainda não tem conta? <LinkTexto href="/cadastro">Criar usuário</LinkTexto>
       </p>
     </form>
   );
