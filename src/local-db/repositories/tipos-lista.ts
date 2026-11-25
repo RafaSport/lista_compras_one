@@ -23,16 +23,13 @@ export async function criarTipoLista(
   const tipoLista: TipoLista = {
     id: crypto.randomUUID(),
     nome: dados.nome,
+    cor: dados.cor,
     ativo: true,
     criado_em: agora,
     ...novoControleSincronizacao(agora),
   };
   await banco.tipos_lista.add(tipoLista);
   return tipoLista;
-}
-
-export async function listarTiposLista(banco: BancoLocal): Promise<TipoLista[]> {
-  return (await banco.tipos_lista.toArray()).filter((item) => item.ativo);
 }
 
 export async function atualizarTipoLista(
@@ -43,13 +40,18 @@ export async function atualizarTipoLista(
   const atual = await banco.tipos_lista.get(entrada.id);
   if (!atual) throw new Error("Tipo de lista não encontrado.");
   if (!atual.ativo) throw new Error("Tipo de lista desativado não pode ser editado.");
-  const atualizado = {
+  const atualizado: TipoLista = {
     ...atual,
     nome: dados.nome,
+    cor: dados.cor,
     ...atualizarControleSincronizacao(atual, new Date().toISOString()),
   };
   await banco.tipos_lista.put(atualizado);
   return atualizado;
+}
+
+export async function listarTiposLista(banco: BancoLocal): Promise<TipoLista[]> {
+  return (await banco.tipos_lista.toArray()).filter((item) => item.ativo);
 }
 
 export async function excluirTipoLista(banco: BancoLocal, entrada: Identificador): Promise<void> {

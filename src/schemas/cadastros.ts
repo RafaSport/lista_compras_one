@@ -2,11 +2,29 @@ import { z } from "zod";
 import { quantidadeSchema, textoOpcionalSchema, uuidSchema } from "./comum";
 import { tipoMedidaSchema, unidadeSchema } from "./unidade";
 
-export const supermercadoSchema = z.object({
-  nome: z.string().trim().min(2, "Informe o nome.").max(60, "Nome muito longo."),
+/** Cores disponíveis para as listas. */
+export const corListaSchema = z.enum([
+  "verde",
+  "azul",
+  "laranja",
+  "roxo",
+  "vermelho",
+  "amarelo",
+  "ciano",
+  "rosa",
+]);
+
+/** Validação do tipo de lista. A cor é opcional e assume "verde" quando omitida. */
+export const tipoListaSchema = z.object({
+  nome: z
+    .string()
+    .trim()
+    .min(1, "Informe o nome da lista.")
+    .max(40, "Use no máximo 40 caracteres."),
+  cor: corListaSchema.default("verde"),
 });
 
-export const tipoListaSchema = z.object({
+export const supermercadoSchema = z.object({
   nome: z.string().trim().min(2, "Informe o nome.").max(60, "Nome muito longo."),
 });
 

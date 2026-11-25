@@ -1,4 +1,16 @@
 /** Tipos persistidos no aparelho, incluindo o controle local de sincronização. */
+
+/** Cores disponíveis para as listas. O valor salvo é o nome, não o hex. */
+export type CorLista =
+  | "verde"
+  | "azul"
+  | "laranja"
+  | "roxo"
+  | "vermelho"
+  | "amarelo"
+  | "ciano"
+  | "rosa";
+
 export interface Identificador {
   id: string;
 }
@@ -17,6 +29,14 @@ export interface DadosSupermercado {
 
 export interface DadosTipoLista {
   nome: string;
+  /** Nome da cor escolhida. Assume "verde" quando omitida. */
+  cor?: CorLista;
+}
+
+export interface TipoLista extends CadastroLocal {
+  nome: string;
+  /** Nome da cor escolhida na criação (ex.: "verde"). */
+  cor: CorLista;
 }
 
 export interface DadosProduto {
@@ -120,10 +140,6 @@ export interface CadastroLocal extends ControleSincronizacao {
 }
 
 export interface Supermercado extends CadastroLocal {
-  nome: string;
-}
-
-export interface TipoLista extends CadastroLocal {
   nome: string;
 }
 

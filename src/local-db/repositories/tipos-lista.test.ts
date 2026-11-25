@@ -5,7 +5,7 @@ import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { BancoLocal } from "../esquema";
-import { criarTipoLista, excluirTipoLista, listarTiposLista } from "./tipos-lista";
+import { criarTipoLista, excluirTipoLista, listarTiposLista, atualizarTipoLista } from "./tipos-lista";
 
 let banco: BancoLocal;
 
@@ -62,4 +62,15 @@ describe("repositório de tipos de lista", () => {
     await excluirTipoLista(banco, { id: tipo.id });
     expect(await banco.tipos_lista.get(tipo.id)).toBeUndefined();
   });
+});
+
+it("persiste a cor informada ao criar e atualizar o tipo de lista", async () => {
+  const criado = await criarTipoLista(banco, { nome: "Alimentos", cor: "vermelho" });
+  expect(criado.cor).toBe("vermelho");
+
+  const atualizado = await atualizarTipoLista(banco, {
+    id: criado.id,
+    dados: { nome: "Alimentos", cor: "azul" },
+  });
+  expect(atualizado.cor).toBe("azul");
 });
