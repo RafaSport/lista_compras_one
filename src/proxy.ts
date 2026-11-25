@@ -1,37 +1,50 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import type { NextFetchEvent, NextRequest } from "next/server";
 import { auth } from "@/auth";
+import { tornarCookieSessaoTemporario } from "@/server/cookie-sessao";
 
 // Rotas que não exigem sessão. Todo o resto é protegido (RF20).
 const ROTAS_PUBLICAS = ["/login", "/cadastro"];
 
-export default auth((requisicao: NextRequest & { auth: unknown }) => {
-  const { pathname } = requisicao.nextUrl;
-  const autenticado = Boolean(requisicao.auth);
+const autenticarRequisicao = auth(
+  (requisicao: NextRequest & { auth: unknown }, _evento: NextFetchEvent) => {
+    void _evento;
 
-  // Considera pública a rota exata e suas subpastas.
-  const ehPublica = ROTAS_PUBLICAS.some(
-    (rota) => pathname === rota || pathname.startsWith(`${rota}/`),
-  );
+    const { pathname } = requisicao.nextUrl;
+    const autenticado = Boolean(requisicao.auth);
 
-  // Sem sessão em rota privada: manda para o login guardando o destino.
-  if (!autenticado && !ehPublica) {
-    const url = requisicao.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("destino", pathname);
-    return NextResponse.redirect(url);
-  }
+    // Considera pública a rota exata e suas subpastas.
+    const ehPublica = ROTAS_PUBLICAS.some(
+      (rota) => pathname === rota || pathname.startsWith(`${rota}/`),
+    );
 
-  // Com sessão em rota pública: manda para a raiz, que já é protegida.
-  if (autenticado && ehPublica) {
-    const url = requisicao.nextUrl.clone();
-    url.pathname = "/";
-    url.search = "";
-    return NextResponse.redirect(url);
-  }
+    // Sem sessão em rota privada: manda para o login guardando o destino.
+    if (!autenticado && !ehPublica) {
+      const url = requisicao.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("destino", pathname);
+      return NextResponse.redirect(url);
+    }
 
-  return NextResponse.next();
-});
+    // Com sessão em rota pública: manda para a tela inicial protegida.
+    if (autenticado && ehPublica) {
+      const url = requisicao.nextUrl.clone();
+      url.pathname = "/inicio";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+
+    return NextResponse.next();
+  },
+);
+
+export default async function proxy(
+  requisicao: NextRequest,
+  evento: NextFetchEvent,
+): Promise<Response> {
+  const resposta = await autenticarRequisicao(requisicao, evento);
+  return tornarCookieSessaoTemporario(resposta ?? NextResponse.next());
+}
 
 export const config = {
   matcher: [

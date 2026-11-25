@@ -10,6 +10,7 @@ import { abrirBanco, fecharBanco } from "../local-db/abrir-banco";
 import * as repositorio from "../local-db/repositories/compras";
 import { criarSupermercado } from "../local-db/repositories/supermercados";
 import { criarTipoLista } from "../local-db/repositories/tipos-lista";
+import { uuidSchema } from "../schemas/comum";
 import { useCompras } from "./use-compras";
 
 let usuarioId: string;
@@ -26,7 +27,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   vi.restoreAllMocks();
-  await fecharBanco(usuarioId);
+  if (uuidSchema.safeParse(usuarioId).success) await fecharBanco(usuarioId);
 });
 
 describe("useCompras", () => {
@@ -48,6 +49,16 @@ describe("useCompras", () => {
     await waitFor(() => expect(result.current.carregando).toBe(false));
     expect(result.current.dados).toEqual([]);
     expect(result.current.compra).toBeNull();
+  });
+
+  it("devolve estado vazio sem lançar quando o usuário ainda não tem UUID", async () => {
+    const { result } = renderHook(() => useCompras(""));
+    expect(result.current.dados).toEqual([]);
+    expect(result.current.compra).toBeNull();
+    expect(result.current.carregando).toBe(false);
+    await expect(result.current.criar({ supermercadoId, tipoListaId })).rejects.toThrow(
+      "Sessão ainda não carregada.",
+    );
   });
 
   it("expõe a falha de leitura do repositório", async () => {

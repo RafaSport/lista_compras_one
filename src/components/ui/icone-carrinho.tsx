@@ -1,24 +1,25 @@
-import type { SVGProps } from "react";
+type Props = {
+  className?: string;
+  size?: number;
+};
 
-// Carrinho de compras em SVG inline.
-// Usa currentColor, então herda a cor do texto onde for colocado.
-export function IconeCarrinho(props: SVGProps<SVGSVGElement>) {
+export function IconeCarrinho({ className, size = 20 }: Props) {
   return (
     <svg
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.8}
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      aria-hidden="true"
-      {...props}
+      className={className}
+      aria-hidden
     >
-      {/* Corpo do carrinho */}
-      <path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 8H6" />
-      {/* Rodas */}
-      <circle cx="10" cy="19" r="1.4" />
-      <circle cx="17" cy="19" r="1.4" />
+      <circle cx="9" cy="21" r="1" />
+      <circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
     </svg>
   );
 }

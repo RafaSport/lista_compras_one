@@ -1,13 +1,16 @@
-// Rodapé global, presente em todas as páginas.
-// Sem padding inferior extra: a altura é fixa e o layout raiz controla o espaço.
-// O ano é fixo para não quebrar o prerender do Next.js 16.
+import { Separador } from "@/components/ui/separador";
+
+// Rodapé global com a assinatura do projeto.
+// A linha divisória vem do componente padrão de UI.
 export function Rodape() {
   return (
-    <footer className="text-muted-foreground shrink-0 px-4 py-2 text-center text-xs">
-      <p>
-        © 2026 — Feito com dedicação por{" "}
-        <span className="text-foreground font-medium">Rafael Guedes</span>
-      </p>
-    </footer>
+    <>
+      <Separador />
+      <footer className="bg-background px-4 py-3">
+        <p className="text-muted-foreground text-center text-xs">
+          © 2026 — Feito com dedicação por Rafael Guedes
+        </p>
+      </footer>
+    </>
   );
 }

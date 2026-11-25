@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { abrirBanco, fecharBanco } from "../local-db/abrir-banco";
 import * as repositorio from "../local-db/repositories/supermercados";
+import { uuidSchema } from "../schemas/comum";
 import { useSupermercados } from "./use-supermercados";
 
 let usuarioId: string;
@@ -20,10 +21,19 @@ beforeEach(() => {
 
 afterEach(async () => {
   vi.restoreAllMocks();
-  await fecharBanco(usuarioId);
+  if (uuidSchema.safeParse(usuarioId).success) await fecharBanco(usuarioId);
 });
 
 describe("useSupermercados", () => {
+  it("devolve estado vazio e rejeita escrita para usuário inválido", async () => {
+    const { result } = renderHook(() => useSupermercados(""));
+    expect(result.current.dados).toEqual([]);
+    expect(result.current.carregando).toBe(false);
+    await expect(result.current.criar({ nome: "Mercado" })).rejects.toThrow(
+      "Identificador de usuário inválido.",
+    );
+  });
+
   it("retorna supermercados ativos e atualiza o estado de carregamento", async () => {
     const ativo = await repositorio.criarSupermercado(banco, { nome: "Mercado ativo" });
     const inativo = await repositorio.criarSupermercado(banco, { nome: "Mercado inativo" });

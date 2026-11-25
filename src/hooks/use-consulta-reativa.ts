@@ -16,6 +16,7 @@ export function useConsultaReativa<T>(
   dependencias: unknown[],
 ): ResultadoConsulta<T> {
   const [erroOperacao, definirErroOperacao] = useState<string | null>(null);
+
   const executar = useCallback(async <TResultado>(operacao: () => Promise<TResultado>) => {
     definirErroOperacao(null);
     try {
@@ -27,6 +28,7 @@ export function useConsultaReativa<T>(
       throw erro;
     }
   }, []);
+
   const resultado = useLiveQuery(async () => {
     try {
       return { dados: await consulta(), erro: null };
@@ -40,6 +42,8 @@ export function useConsultaReativa<T>(
 
   return {
     dados: resultado?.dados,
+    // Se a consulta falhou, não estamos mais carregando — libera a tela
+    // para mostrar a mensagem de erro em vez de "Carregando..." eterno.
     carregando: resultado === undefined,
     erro: resultado?.erro ?? erroOperacao,
     executar,

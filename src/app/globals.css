@@ -139,3 +139,24 @@
     outline-offset: 2px;
   }
 }
+
+@theme {
+  --animate-onda-texto: onda-texto 1.6s ease-in-out infinite;
+}
+
+@keyframes onda-texto {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-onda-texto {
+    animation: none;
+    opacity: 1;
+  }
+}

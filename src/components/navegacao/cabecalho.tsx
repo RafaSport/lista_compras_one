@@ -1,14 +1,32 @@
-import { IconeCarrinho } from "@/components/ui/icone-carrinho";
+"use client";
 
-// Cabeçalho das telas privadas.
-// Mostra o ícone do carrinho pequeno, no canto esquerdo, na cor primária.
+import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { Botao } from "@/components/ui/botao";
+import { IconeCarrinho } from "@/components/ui/icone-carrinho";
+import { Separador } from "@/components/ui/separador";
+
+// Cabeçalho fixo das telas privadas.
+// Mostra o nome do app à esquerda e a ação de sair à direita.
 export function Cabecalho() {
   return (
-    <header className="border-border bg-background shrink-0 border-b">
-      <div className="mx-auto flex w-full max-w-md items-center gap-2 px-4 py-2">
-        <IconeCarrinho className="text-primary size-5" />
-        <span className="text-primary text-sm font-semibold">Lista de Compras</span>
-      </div>
-    </header>
+    <>
+      <header className="bg-background flex items-center justify-between gap-3 px-4 py-3">
+        <Link href="/inicio" className="text-primary flex items-center gap-2">
+          <IconeCarrinho className="size-5" />
+          <span className="text-sm font-semibold">Lista de Compras</span>
+        </Link>
+
+        <Botao
+          variante="perigo"
+          tamanho="sm"
+          onClick={() => signOut({ callbackUrl: "/login" })}
+        >
+          Sair
+        </Botao>
+      </header>
+
+      <Separador />
+    </>
   );
 }

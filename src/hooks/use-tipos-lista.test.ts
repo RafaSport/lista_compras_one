@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { abrirBanco, fecharBanco } from "../local-db/abrir-banco";
 import * as repositorio from "../local-db/repositories/tipos-lista";
+import { uuidSchema } from "../schemas/comum";
 import { useTiposLista } from "./use-tipos-lista";
 
 let usuarioId: string;
@@ -20,10 +21,19 @@ beforeEach(() => {
 
 afterEach(async () => {
   vi.restoreAllMocks();
-  await fecharBanco(usuarioId);
+  if (uuidSchema.safeParse(usuarioId).success) await fecharBanco(usuarioId);
 });
 
 describe("useTiposLista", () => {
+  it("devolve estado vazio e rejeita escrita para usuário inválido", async () => {
+    const { result } = renderHook(() => useTiposLista(""));
+    expect(result.current.dados).toEqual([]);
+    expect(result.current.carregando).toBe(false);
+    await expect(result.current.criar({ nome: "Alimentação" })).rejects.toThrow(
+      "Identificador de usuário inválido.",
+    );
+  });
+
   it("retorna tipos ativos e atualiza o estado de carregamento", async () => {
     const ativo = await repositorio.criarTipoLista(banco, { nome: "Alimentação" });
     const inativo = await repositorio.criarTipoLista(banco, { nome: "Higiene" });

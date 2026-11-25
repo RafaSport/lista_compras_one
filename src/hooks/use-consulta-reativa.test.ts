@@ -37,6 +37,7 @@ describe("useConsultaReativa", () => {
     );
     await waitFor(() => expect(result.current.erro).toBe("Falha da consulta"));
     expect(result.current.dados).toBeUndefined();
+    expect(result.current.carregando).toBe(false);
   });
 
   it("registra o erro da escrita e mantém a rejeição para o chamador", async () => {

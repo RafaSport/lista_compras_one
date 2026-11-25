@@ -17,7 +17,7 @@ export default function PaginaLogin() {
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
 
-  // Envia as credenciais. Em sucesso, volta para a raiz, que é protegida.
+  // Envia as credenciais. Em sucesso, abre a tela inicial protegida.
   async function entrar(evento: React.FormEvent) {
     evento.preventDefault();
     setErro(null);
@@ -40,7 +40,7 @@ export default function PaginaLogin() {
     setUsuario("");
     setSenha("");
 
-    router.push("/");
+    router.push("/inicio");
     router.refresh();
   }
 
