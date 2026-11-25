@@ -3,7 +3,7 @@ import { quantidadeSchema, textoOpcionalSchema, uuidSchema } from "./comum";
 import { tipoMedidaSchema, unidadeSchema } from "./unidade";
 
 /** Cores disponíveis para as listas. */
-export const corListaSchema = z.enum([
+export const coresLista = [
   "verde",
   "azul",
   "laranja",
@@ -12,7 +12,9 @@ export const corListaSchema = z.enum([
   "amarelo",
   "ciano",
   "rosa",
-]);
+] as const;
+
+export const corListaSchema = z.enum(coresLista);
 
 /** Validação do tipo de lista. A cor é opcional e assume "verde" quando omitida. */
 export const tipoListaSchema = z.object({
