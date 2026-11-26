@@ -20,12 +20,6 @@ async function ConteudoProtegido({ children }: { children: ReactNode }) {
       {/* Cabeçalho já traz a própria linha divisória abaixo dele */}
       <Cabecalho />
 
-      {/* Saudação ao usuário, separada do conteúdo por uma linha */}
-      <div className="px-4 py-3">
-        <Saudacao />
-      </div>
-      <Separador />
-
       {/* Área de conteúdo. min-h-0 permite encolher; overflow-y-auto só age se precisar. */}
       <main className="mx-auto min-h-0 w-full max-w-md flex-1 overflow-y-auto px-4 py-4">
         {children}

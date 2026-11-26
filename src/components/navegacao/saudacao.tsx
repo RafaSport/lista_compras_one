@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 
-// Saudação abaixo do cabeçalho, com o nome do usuário logado.
+// Saudação exibida no centro do cabeçalho, com o nome do usuário logado.
 // O nome vem do campo `name` da sessão, que o authorize preenche com o login.
 function primeiroNome(nomeCompleto: string) {
   // O login é nome.sobrenome. Usamos só o primeiro pedaço, capitalizado.
@@ -26,8 +26,8 @@ export function Saudacao() {
   if (!nome) return null;
 
   return (
-    <p className="text-foreground text-sm">
-      {periodoDoDia()}, <strong>{primeiroNome(nome)}</strong>. Seja bem-vindo!
+    <p className="text-muted-foreground truncate text-center text-xs leading-tight">
+      {periodoDoDia()}, <strong className="text-foreground font-semibold">{primeiroNome(nome)}</strong>.
     </p>
   );
 }
