@@ -7,18 +7,16 @@ import { cadastroSchema } from "@/schemas/senha";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useEffect } from "react";
 
 // Tela de cadastro de usuário (RF21, RN12). Rota pública.
 // O login é gerado como nome.sobrenome. Se já existir, o servidor responde 409
-// e a tela pede um sobrenome diferente. O cadastro exige código de convite.
+// e a tela pede um sobrenome diferente.
 export default function PaginaCadastro() {
   const router = useRouter();
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmacaoSenha, setConfirmacaoSenha] = useState("");
-  const [codigoConvite, setCodigoConvite] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [sucesso, setSucesso] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
@@ -32,21 +30,13 @@ export default function PaginaCadastro() {
       ? `${nome.trim().toLowerCase()}.${sobrenome.trim().toLowerCase()}`
       : "";
 
-  useEffect(() => {
-    // Ao voltar pelo navegador, o estado antigo pode ser restaurado do cache.
-    // Limpa os avisos para a tela não reaparecer com erro velho.
-    setErro(null);
-    setSucesso(null);
-    setErros({});
-  }, []);
-
   async function cadastrar(evento: React.FormEvent) {
     evento.preventDefault();
     setErro(null);
     setSucesso(null);
     setErros({});
 
-    const dados = { nome, sobrenome, senha, confirmacaoSenha, codigoConvite };
+    const dados = { nome, sobrenome, senha, confirmacaoSenha };
 
     // Valida no cliente com o mesmo schema do servidor. Evita enviar vazio.
     const validacao = cadastroSchema.safeParse(dados);
@@ -81,11 +71,6 @@ export default function PaginaCadastro() {
       return;
     }
 
-    if (resposta.status === 403) {
-      setErro("Código de convite inválido.");
-      return;
-    }
-
     if (!resposta.ok) {
       setErro("Não foi possível criar o usuário. Tente novamente.");
       return;
@@ -95,7 +80,6 @@ export default function PaginaCadastro() {
     setSobrenome("");
     setSenha("");
     setConfirmacaoSenha("");
-    setCodigoConvite("");
     setSucesso("Usuário criado com sucesso. Redirecionando para o login...");
 
     setTimeout(() => {
@@ -111,6 +95,7 @@ export default function PaginaCadastro() {
         autoComplete="given-name"
         value={nome}
         onChange={(e) => setNome(e.target.value)}
+        erro={erros.nome}
         obrigatorio
       />
 
@@ -120,6 +105,7 @@ export default function PaginaCadastro() {
         autoComplete="family-name"
         value={sobrenome}
         onChange={(e) => setSobrenome(e.target.value)}
+        erro={erros.sobrenome}
         obrigatorio
       />
 
@@ -131,6 +117,7 @@ export default function PaginaCadastro() {
         value={senha}
         onChange={(e) => setSenha(e.target.value)}
         dica="Use ao menos uma letra e um número."
+        erro={erros.senha}
         obrigatorio
       />
 
@@ -141,6 +128,7 @@ export default function PaginaCadastro() {
         autoComplete="new-password"
         value={confirmacaoSenha}
         onChange={(e) => setConfirmacaoSenha(e.target.value)}
+        erro={erros.confirmacaoSenha}
         obrigatorio
       />
 

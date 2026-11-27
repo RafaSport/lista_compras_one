@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/server/prisma";
-import { conferirCodigoConvite } from "@/server/codigo-convite";
 import { cadastroSchema } from "@/schemas/senha";
 
 // Gera o login no formato nome.sobrenome, sem acentos e em minúsculas (RN12).
@@ -16,7 +15,7 @@ function gerarLogin(nome: string, sobrenome: string) {
   return `${limpar(nome)}.${limpar(sobrenome)}`;
 }
 
-// Cria um usuário. Rota pública (RF21). Exige código de convite.
+// Cria um usuário. Rota pública (RF21).
 export async function POST(requisicao: Request) {
   const corpo = await requisicao.json().catch(() => null);
   const parsed = cadastroSchema.safeParse(corpo);
@@ -25,12 +24,7 @@ export async function POST(requisicao: Request) {
     return NextResponse.json({ erro: "Dados inválidos." }, { status: 400 });
   }
 
-  const { nome, sobrenome, senha, codigoConvite } = parsed.data;
-
-  // Convite conferido antes de qualquer acesso ao banco.
-  if (!conferirCodigoConvite(codigoConvite)) {
-    return NextResponse.json({ erro: "Código de convite inválido." }, { status: 403 });
-  }
+  const { nome, sobrenome, senha } = parsed.data;
 
   const login = gerarLogin(nome, sobrenome);
 

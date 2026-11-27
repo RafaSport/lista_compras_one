@@ -5,6 +5,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTiposLista } from "@/hooks/use-tipos-lista";
+import { useEscritaTiposLista } from "@/hooks/use-escrita-tipos-lista";
+import { useEstadoInicial } from "@/hooks/use-estado-inicial";
+import { Formulario } from "@/components/forms/formulario";
+import { Campo } from "@/components/forms/campo";
 import { SeletorCor } from "@/components/ui/seletor-cor";
 import { Botao } from "@/components/ui/botao";
 import { tipoListaSchema } from "@/schemas/cadastros";
@@ -12,7 +16,6 @@ import type { CorLista } from "@/types/banco-local";
 
 // Tela de criação e edição de lista.
 // Com ?id=<listaId> na URL, o formulário entra em modo de edição.
-// Layout compacto: cabe sem rolagem em telas de celular.
 export default function PaginaNovaLista() {
   const { data: sessao, status } = useSession();
   const usuarioId = sessao?.user?.id ?? "";
@@ -38,9 +41,11 @@ function FormularioLista({ usuarioId }: { usuarioId: string }) {
   const listaId = parametros.get("id");
   const editando = listaId !== null;
 
-  const { criar, atualizar, dados: tiposLista, carregando } = useTiposLista(usuarioId);
+  // Leitura reativa apenas para carregar os valores em modo de edição.
+  const { dados: tiposLista, carregando } = useTiposLista(usuarioId);
+  // Escrita sem inscrição reativa: não segura a navegação.
+  const { criar, atualizar } = useEscritaTiposLista(usuarioId);
 
-  // Em modo de edição, carrega os valores atuais da lista.
   const listaAtual = editando
     ? (tiposLista.find((item) => item.id === listaId) ?? null)
     : null;
@@ -51,14 +56,21 @@ function FormularioLista({ usuarioId }: { usuarioId: string }) {
   const [erro, definirErro] = useState<string | null>(null);
   const [salvando, definirSalvando] = useState(false);
 
-  // Preenche o formulário uma única vez, quando a lista chega do banco.
+  // Devolve o formulário ao estado inicial ao sair da tela.
+  useEstadoInicial(() => {
+    definirNome("");
+    definirCor(null);
+    definirErro(null);
+    definirSalvando(false);
+  });
+
+  // Preenche uma única vez, quando a lista chega do banco.
   if (editando && listaAtual && !preenchido) {
     definirNome(listaAtual.nome);
     definirCor(listaAtual.cor ?? null);
     definirPreenchido(true);
   }
 
-  // Validação em tempo real: o botão só habilita com nome e cor válidos.
   const validacao = tipoListaSchema.safeParse({ nome, cor: cor ?? undefined });
   const podeSalvar = validacao.success && !salvando;
 
@@ -78,9 +90,8 @@ function FormularioLista({ usuarioId }: { usuarioId: string }) {
       } else {
         await criar(validacao.data);
       }
-      // push primeiro; refresh depois revalida a rota de destino.
-      router.push("/listas");
-      router.refresh();
+      // replace evita deixar o formulário no histórico.
+      router.replace("/listas");
     } catch (causa) {
       definirErro(
         causa instanceof Error ? causa.message : "Não foi possível salvar a lista.",
@@ -89,7 +100,6 @@ function FormularioLista({ usuarioId }: { usuarioId: string }) {
     }
   }
 
-  // Enquanto a lista de edição ainda não chegou, não mostra o formulário vazio.
   if (editando && carregando) {
     return <p className="text-muted-foreground text-sm">Carregando...</p>;
   }
@@ -108,39 +118,23 @@ function FormularioLista({ usuarioId }: { usuarioId: string }) {
   }
 
   return (
-    <form onSubmit={salvar} className="flex flex-col gap-1">
-      {/* Card do formulário, com espaçamento reduzido */}
-      <div className="border-border bg-card flex flex-col gap-3 rounded-lg border p-3">
-        <p className="text-foreground text-center text-sm font-medium">
-          {editando ? "Editar Lista" : "Informações da Lista Nova"}
-        </p>
+    <Formulario onSubmit={salvar} erroGeral={erro} className="gap-3">
+      <p className="text-foreground text-center text-sm font-medium">
+        {editando ? "Editar Lista" : "Informações da Lista Nova"}
+      </p>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="nome-lista" className="text-foreground text-sm font-medium">
-            Nome da Lista
-          </label>
-          <input
-            id="nome-lista"
-            type="text"
-            value={nome}
-            onChange={(evento) => definirNome(evento.target.value)}
-            placeholder="Ex: Alimentos, Limpeza..."
-            maxLength={40}
-            autoComplete="off"
-            className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:border-ring h-9 rounded-md border px-3 text-sm outline-none"
-          />
-        </div>
+      <Campo
+        rotulo="Nome da Lista"
+        value={nome}
+        onChange={(evento) => definirNome(evento.target.value)}
+        placeholder="Ex: Alimentos, Limpeza..."
+        maxLength={40}
+        autoComplete="off"
+        obrigatorio
+      />
 
-        <SeletorCor valor={cor} aoMudar={definirCor} />
+      <SeletorCor valor={cor} aoMudar={definirCor} />
 
-        {erro && (
-          <p role="alert" className="text-destructive text-xs">
-            {erro}
-          </p>
-        )}
-      </div>
-
-      {/* Ações lado a lado, com a mesma largura */}
       <div className="flex gap-2">
         <Link href="/listas" className="flex flex-1">
           <Botao type="button" variante="secundario" className="w-full">
@@ -156,6 +150,6 @@ function FormularioLista({ usuarioId }: { usuarioId: string }) {
           {editando ? "Salvar Alterações" : "Salvar Lista"}
         </Botao>
       </div>
-    </form>
+    </Formulario>
   );
 }

@@ -10,4 +10,10 @@ export default defineConfig({
       ),
     },
   },
+  test: {
+    // jsdom em toda a suíte: os testes de hook e componente precisam de DOM.
+    // Os testes de domínio e repositório continuam passando em jsdom.
+    environment: "jsdom",
+    pool: "vmThreads",
+  },
 });
