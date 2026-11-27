@@ -185,8 +185,8 @@
 
 - [x] `/login`
 - [x] `/cadastro`
-- [?] `/inicio`
-- [?] `/listas` e `/listas/nova`
+- [x] `/inicio`
+- [x] `/listas` e `/listas/nova`
 - [?] `/compras` e `/compras/nova`
 - [?] `/compras/[id]/montar`
 - [?] `/compras/[id]/comprar`

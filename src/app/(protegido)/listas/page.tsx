@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { useSession } from "next-auth/react";
-import { useTiposLista } from "@/hooks/use-tipos-lista";
 import { AvatarLetra } from "@/components/ui/avatar-letra";
 import { Botao } from "@/components/ui/botao";
 import { Dialogo } from "@/components/ui/dialogo";
+import { useTiposLista } from "@/hooks/use-tipos-lista";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useState } from "react";
 
 // Tela de listas criadas (tipos de lista).
 // Ordena alfabeticamente e mostra a cor escolhida em cada card.
@@ -59,9 +59,7 @@ function ConteudoListas({ usuarioId }: { usuarioId: string }) {
         <div className="flex flex-col gap-0.5">
           <h1 className="text-foreground text-lg font-semibold">Minhas Listas</h1>
           <p className="text-muted-foreground text-xs">
-            {carregando
-              ? "Carregando..."
-              : `${ordenadas.length} lista(s) cadastrada(s)`}
+            {carregando ? "Carregando..." : `${ordenadas.length} lista(s) cadastrada(s)`}
           </p>
         </div>
         <Link href="/listas/nova">
@@ -93,9 +91,7 @@ function ConteudoListas({ usuarioId }: { usuarioId: string }) {
             <AvatarLetra nome={lista.nome} cor={lista.cor ?? "verde"} />
 
             <Link href={`/listas/${lista.id}`} className="min-w-0 flex-1">
-              <p className="text-card-foreground truncate text-sm font-medium">
-                {lista.nome}
-              </p>
+              <p className="text-card-foreground truncate text-sm font-medium">{lista.nome}</p>
               <p className="text-muted-foreground text-xs">
                 Criada em {new Date(lista.criado_em).toLocaleDateString("pt-BR")}
               </p>
@@ -103,7 +99,7 @@ function ConteudoListas({ usuarioId }: { usuarioId: string }) {
 
             {/* Ações: editar e excluir. Alvo de toque de 44px. */}
             <Link
-              href={`/listas/${lista.id}/editar`}
+              href={`/listas/nova?id=${lista.id}`}
               aria-label={`Editar ${lista.nome}`}
               className="text-muted-foreground hover:text-foreground flex size-11 items-center justify-center rounded-md"
             >
