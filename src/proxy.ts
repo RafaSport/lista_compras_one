@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextFetchEvent, NextRequest } from "next/server";
 import { auth } from "@/auth";
-import { tornarCookieSessaoTemporario } from "@/server/cookie-sessao";
 
 // Rotas que não exigem sessão. Todo o resto é protegido (RF20).
 const ROTAS_PUBLICAS = ["/login", "/cadastro"];
@@ -38,12 +37,8 @@ const autenticarRequisicao = auth(
   },
 );
 
-export default async function proxy(
-  requisicao: NextRequest,
-  evento: NextFetchEvent,
-): Promise<Response> {
-  const resposta = await autenticarRequisicao(requisicao, evento);
-  return tornarCookieSessaoTemporario(resposta ?? NextResponse.next());
+export default async function proxy(requisicao: NextRequest, evento: NextFetchEvent) {
+  return autenticarRequisicao(requisicao, evento);
 }
 
 export const config = {

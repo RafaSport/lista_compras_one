@@ -3,8 +3,6 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { BarraInferior } from "@/components/navegacao/barra-inferior";
 import { Cabecalho } from "@/components/navegacao/cabecalho";
-import { Saudacao } from "@/components/navegacao/saudacao";
-import { Separador } from "@/components/ui/separador";
 
 // Casca de todas as rotas privadas.
 // Verifica a sessão no servidor antes de renderizar qualquer tela protegida.

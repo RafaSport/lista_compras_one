@@ -13,7 +13,6 @@ export const cadastroSchema = z
     sobrenome: z.string().trim().min(2, "Informe o sobrenome.").max(60, "Sobrenome muito longo."),
     senha: senhaSchema,
     confirmacaoSenha: z.string(),
-    codigoConvite: z.string().min(1, "Informe o código de convite."),
   })
   .refine((dados) => dados.senha === dados.confirmacaoSenha, {
     message: "As senhas não são iguais.",

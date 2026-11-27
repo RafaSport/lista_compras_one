@@ -18,12 +18,16 @@ export function Formulario({ erroGeral, sucesso, children, className, ...resto }
       // noValidate desliga a validação nativa do navegador;
       // quem valida é o Zod, para manter a mensagem consistente
       noValidate
-      className={cn("flex flex-col gap-4 border-[0.3px] border-primary/30 rounded-md p-4", className)}
+      className={cn(
+        "flex flex-col gap-4 border-[0.3px] border-primary/30 rounded-md p-4",
+        // Rolagem própria: em tela pequena o formulário não estoura a viewport.
+        "overflow-y-auto overscroll-contain",
+        className,
+      )}
       {...resto}
     >
       {erroGeral && <Mensagem variante="erro">{erroGeral}</Mensagem>}
       {sucesso && <Mensagem variante="sucesso">{sucesso}</Mensagem>}
-
       {children}
     </form>
   );

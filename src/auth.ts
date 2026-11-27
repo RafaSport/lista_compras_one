@@ -4,7 +4,9 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 
-const DURACAO_MAXIMA_SESSAO_SEGUNDOS = 60 * 60 * 8;
+// Sessão de 30 dias com renovação deslizante (RNF04). O prazo cobre o intervalo
+// entre montar a lista em casa e usar no mercado, inclusive sem internet.
+const DURACAO_SESSAO_SEGUNDOS = 60 * 60 * 24 * 30;
 
 // Campos que o formulário de login envia. O nome precisa bater com o que a
 // tela usa em signIn("credentials", { ... }).
@@ -16,8 +18,7 @@ const credenciaisSchema = z.object({
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
-    maxAge: DURACAO_MAXIMA_SESSAO_SEGUNDOS,
-    // A sessão não sobrevive ao fechamento do navegador porque o cookie é emitido sem persistência; o maxAge é apenas o teto de uso contínuo.
+    maxAge: DURACAO_SESSAO_SEGUNDOS,
   },
   cookies: {
     sessionToken: {
@@ -30,7 +31,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         sameSite: "lax",
         path: "/",
         secure: process.env.NODE_ENV === "production",
-        // Sem maxAge e sem expires: o navegador descarta o cookie ao fechar.
+        // Cookie persistente: sobrevive ao fechamento do navegador para o app
+        // abrir no mercado sem exigir login (RNF04).
+        maxAge: DURACAO_SESSAO_SEGUNDOS,
       },
     },
   },
@@ -77,23 +80,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       const agora = Math.floor(Date.now() / 1000);
-      let sessaoIniciadaEm =
-        typeof token.sessaoIniciadaEm === "number" ? token.sessaoIniciadaEm : undefined;
 
       if (user) {
         token.id = user.id;
-        sessaoIniciadaEm = agora;
-      } else if (sessaoIniciadaEm === undefined) {
-        // Mantém sessões já existentes limitadas pelo instante original de emissão.
-        sessaoIniciadaEm = typeof token.iat === "number" ? token.iat : agora;
       }
-      token.sessaoIniciadaEm = sessaoIniciadaEm;
 
-      // Auth.js renova o JWT ao consultar a sessão; este marco mantém oito horas
-      // como limite absoluto em vez de estender a sessão a cada renovação.
-      if (agora - sessaoIniciadaEm >= DURACAO_MAXIMA_SESSAO_SEGUNDOS) {
+      // Renovação deslizante (RNF04): o marco avança a cada requisição
+      // autenticada. Quem abre o app ao menos uma vez a cada 30 dias nunca é
+      // deslogado. Sessões antigas sem o marco herdam o iat como ponto de partida.
+      const ultimoAcesso =
+        typeof token.ultimoAcesso === "number"
+          ? token.ultimoAcesso
+          : typeof token.iat === "number"
+            ? token.iat
+            : agora;
+
+      // Teto de segurança: se o último acesso já passou da janela, a sessão morre.
+      if (agora - ultimoAcesso >= DURACAO_SESSAO_SEGUNDOS) {
         return null;
       }
+
+      token.ultimoAcesso = agora;
 
       return token;
     },
@@ -102,9 +109,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id as string;
       }
 
-      if (typeof token.sessaoIniciadaEm === "number") {
+      if (typeof token.ultimoAcesso === "number") {
         session.expires = new Date(
-          (token.sessaoIniciadaEm + DURACAO_MAXIMA_SESSAO_SEGUNDOS) * 1000,
+          (token.ultimoAcesso + DURACAO_SESSAO_SEGUNDOS) * 1000,
         ) as Date & string;
       }
 
