@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useTiposLista } from "@/hooks/use-tipos-lista";
 import { AvatarLetra } from "@/components/ui/avatar-letra";
 import { Botao } from "@/components/ui/botao";
+import { Dialogo } from "@/components/ui/dialogo";
 
 // Tela de listas criadas (tipos de lista).
 // Ordena alfabeticamente e mostra a cor escolhida em cada card.
@@ -28,12 +30,28 @@ export default function PaginaListas() {
 }
 
 function ConteudoListas({ usuarioId }: { usuarioId: string }) {
-  const { dados: tiposLista, carregando, erro } = useTiposLista(usuarioId);
+  const { dados: tiposLista, carregando, erro, excluir } = useTiposLista(usuarioId);
+  const [listaParaExcluir, definirListaParaExcluir] = useState<{
+    id: string;
+    nome: string;
+  } | null>(null);
+  const [excluindo, definirExcluindo] = useState(false);
 
   // Ordenação alfabética, ignorando acentos e maiúsculas.
   const ordenadas = [...tiposLista].sort((a, b) =>
     a.nome.localeCompare(b.nome, "pt-BR", { sensitivity: "base" }),
   );
+
+  async function confirmarExclusao() {
+    if (!listaParaExcluir) return;
+    definirExcluindo(true);
+    try {
+      await excluir({ id: listaParaExcluir.id });
+      definirListaParaExcluir(null);
+    } finally {
+      definirExcluindo(false);
+    }
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -46,7 +64,6 @@ function ConteudoListas({ usuarioId }: { usuarioId: string }) {
               : `${ordenadas.length} lista(s) cadastrada(s)`}
           </p>
         </div>
-
         <Link href="/listas/nova">
           <Botao tamanho="sm">+ Nova</Botao>
         </Link>
@@ -71,7 +88,7 @@ function ConteudoListas({ usuarioId }: { usuarioId: string }) {
         {ordenadas.map((lista) => (
           <li
             key={lista.id}
-            className="border-border bg-card flex items-center gap-3 rounded-lg border p-3"
+            className="border-border bg-card flex items-center gap-1 rounded-lg border p-3"
           >
             <AvatarLetra nome={lista.nome} cor={lista.cor ?? "verde"} />
 
@@ -84,12 +101,82 @@ function ConteudoListas({ usuarioId }: { usuarioId: string }) {
               </p>
             </Link>
 
-            <span aria-hidden className="text-muted-foreground text-lg">
-              ›
-            </span>
+            {/* Ações: editar e excluir. Alvo de toque de 44px. */}
+            <Link
+              href={`/listas/${lista.id}/editar`}
+              aria-label={`Editar ${lista.nome}`}
+              className="text-muted-foreground hover:text-foreground flex size-11 items-center justify-center rounded-md"
+            >
+              <IconeLapis />
+            </Link>
+
+            <Botao
+              variante="fantasma"
+              onClick={() => definirListaParaExcluir({ id: lista.id, nome: lista.nome })}
+              aria-label={`Excluir ${lista.nome}`}
+              className="text-muted-foreground hover:text-destructive size-11 p-0"
+            >
+              <IconeLixeira />
+            </Botao>
           </li>
         ))}
       </ul>
+
+      <Dialogo
+        aberto={listaParaExcluir !== null}
+        aoFechar={() => definirListaParaExcluir(null)}
+        titulo="Excluir lista"
+        descricao={
+          listaParaExcluir
+            ? `Excluir "${listaParaExcluir.nome}"? Se houver compras com esta lista, ela será desativada em vez de apagada.`
+            : undefined
+        }
+        textoConfirmar="Excluir"
+        aoConfirmar={confirmarExclusao}
+        carregando={excluindo}
+        varianteConfirmar="perigo"
+      />
     </div>
+  );
+}
+
+function IconeLapis() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </svg>
+  );
+}
+
+function IconeLixeira() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M3 6h18" />
+      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+      <line x1="10" y1="11" x2="10" y2="17" />
+      <line x1="14" y1="11" x2="14" y2="17" />
+    </svg>
   );
 }

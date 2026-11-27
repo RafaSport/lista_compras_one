@@ -44,9 +44,8 @@ function FormularioNovaLista({ usuarioId }: { usuarioId: string }) {
   const validacao = tipoListaSchema.safeParse({ nome, cor: cor ?? undefined });
   const podeSalvar = validacao.success && !salvando;
 
-  async function salvar(evento: React.FormEvent) {
+    async function salvar(evento: React.FormEvent) {
     evento.preventDefault();
-
     if (!validacao.success) {
       definirErro(validacao.error.issues[0]?.message ?? "Dados inválidos.");
       return;
@@ -57,6 +56,8 @@ function FormularioNovaLista({ usuarioId }: { usuarioId: string }) {
 
     try {
       await criar(validacao.data);
+      // refresh() invalida o cache do App Router para a lista nova aparecer.
+      router.refresh();
       router.push("/listas");
     } catch (causa) {
       definirErro(
