@@ -34,7 +34,7 @@ async function adicionarCompraNaFila(id: string, ordem: number): Promise<void> {
     atualizado_em: criado,
     excluido_em: null,
   });
-    await banco.tipos_lista.put({
+  await banco.tipos_lista.put({
     id: tipoListaId,
     nome: `Tipo ${ordem}`,
     cor: "verde",

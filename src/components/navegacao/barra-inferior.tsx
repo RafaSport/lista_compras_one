@@ -26,8 +26,7 @@ export function BarraInferior() {
   return (
     <nav className="border-border bg-background flex items-center justify-around gap-1 border-t px-2 py-2">
       {itens.map((item) => {
-        const ativo =
-          caminho === item.href || caminho.startsWith(`${item.href}/`);
+        const ativo = caminho === item.href || caminho.startsWith(`${item.href}/`);
         const Icone = item.icone;
 
         return (

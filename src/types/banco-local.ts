@@ -1,14 +1,7 @@
 /** Tipos persistidos no aparelho, incluindo o controle local de sincronização. */
 
 /** Cores disponíveis para as listas. O valor salvo é o nome, não o hex. */
-export type CorLista =
-  | "verde"
-  | "azul"
-  | "laranja"
-  | "roxo"
-  | "vermelho"
-  | "amarelo"
-  | "rosa";
+export type CorLista = "verde" | "azul" | "laranja" | "roxo" | "vermelho" | "amarelo" | "rosa";
 
 export interface Identificador {
   id: string;

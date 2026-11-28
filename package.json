@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "tipos": "tsc --noEmit",
-    "verificar": "npm run lint && npm run tipos",
+    "verificar": "npm run lint && npm run tipos && npm run formatar:verificar",
     "test": "vitest run",
     "formatar:verificar": "prettier --check ."
   },

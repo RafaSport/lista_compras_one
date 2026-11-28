@@ -17,11 +17,7 @@ export function Separador({ orientacao = "horizontal", className }: Props) {
     <div
       role="separator"
       aria-orientation={orientacao}
-      className={cn(
-        "bg-border shrink-0",
-        horizontal ? "h-px w-full" : "h-full w-px",
-        className,
-      )}
+      className={cn("bg-border shrink-0", horizontal ? "h-px w-full" : "h-full w-px", className)}
     />
   );
 }

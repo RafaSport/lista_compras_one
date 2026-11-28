@@ -27,7 +27,8 @@ export function Saudacao() {
 
   return (
     <p className="text-muted-foreground truncate text-center text-xs leading-tight">
-      {periodoDoDia()}, <strong className="text-foreground font-semibold">{primeiroNome(nome)}</strong>.
+      {periodoDoDia()},{" "}
+      <strong className="text-foreground font-semibold">{primeiroNome(nome)}</strong>.
     </p>
   );
 }

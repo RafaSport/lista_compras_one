@@ -110,9 +110,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       if (typeof token.ultimoAcesso === "number") {
-        session.expires = new Date(
-          (token.ultimoAcesso + DURACAO_SESSAO_SEGUNDOS) * 1000,
-        ) as Date & string;
+        session.expires = new Date((token.ultimoAcesso + DURACAO_SESSAO_SEGUNDOS) * 1000) as Date &
+          string;
       }
 
       return session;

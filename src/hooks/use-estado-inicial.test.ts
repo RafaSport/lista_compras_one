@@ -23,10 +23,9 @@ describe("useEstadoInicial", () => {
     const primeira = vi.fn();
     const segunda = vi.fn();
 
-    const { rerender, unmount } = renderHook(
-      ({ aoZerar }) => useEstadoInicial(aoZerar),
-      { initialProps: { aoZerar: primeira } },
-    );
+    const { rerender, unmount } = renderHook(({ aoZerar }) => useEstadoInicial(aoZerar), {
+      initialProps: { aoZerar: primeira },
+    });
 
     rerender({ aoZerar: segunda });
     unmount();

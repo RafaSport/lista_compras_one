@@ -63,9 +63,9 @@ describe("useEscritaTiposLista", () => {
     const { result } = renderHook(() => useEscritaTiposLista(USUARIO_ID));
 
     await act(async () => {
-      await expect(
-        result.current.criar({ nome: "Alimentos", cor: "verde" }),
-      ).rejects.toThrow("Falha ao gravar");
+      await expect(result.current.criar({ nome: "Alimentos", cor: "verde" })).rejects.toThrow(
+        "Falha ao gravar",
+      );
     });
 
     expect(result.current.erro).toBe("Falha ao gravar");
@@ -75,9 +75,9 @@ describe("useEscritaTiposLista", () => {
     const { result } = renderHook(() => useEscritaTiposLista("id-invalido"));
 
     await act(async () => {
-      await expect(
-        result.current.criar({ nome: "Alimentos", cor: "verde" }),
-      ).rejects.toThrow("Identificador de usuário inválido.");
+      await expect(result.current.criar({ nome: "Alimentos", cor: "verde" })).rejects.toThrow(
+        "Identificador de usuário inválido.",
+      );
     });
 
     expect(abrirBanco).not.toHaveBeenCalled();

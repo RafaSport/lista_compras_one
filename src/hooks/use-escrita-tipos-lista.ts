@@ -6,10 +6,7 @@
  */
 import { useCallback, useState } from "react";
 import { abrirBanco } from "../local-db/abrir-banco";
-import {
-  atualizarTipoLista,
-  criarTipoLista,
-} from "../local-db/repositories/tipos-lista";
+import { atualizarTipoLista, criarTipoLista } from "../local-db/repositories/tipos-lista";
 import { uuidSchema } from "../schemas/comum";
 import type { Atualizacao, DadosTipoLista } from "../types/banco-local";
 
@@ -28,9 +25,7 @@ export function useEscritaTiposLista(usuarioId: string) {
       try {
         return await criarTipoLista(exigirBanco(), entrada);
       } catch (causa) {
-        definirErro(
-          causa instanceof Error ? causa.message : "Não foi possível salvar a lista.",
-        );
+        definirErro(causa instanceof Error ? causa.message : "Não foi possível salvar a lista.");
         throw causa;
       }
     },
@@ -43,9 +38,7 @@ export function useEscritaTiposLista(usuarioId: string) {
       try {
         return await atualizarTipoLista(exigirBanco(), entrada);
       } catch (causa) {
-        definirErro(
-          causa instanceof Error ? causa.message : "Não foi possível atualizar a lista.",
-        );
+        definirErro(causa instanceof Error ? causa.message : "Não foi possível atualizar a lista.");
         throw causa;
       }
     },

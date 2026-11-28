@@ -12,9 +12,7 @@ import { Suspense, useState } from "react";
 // useSearchParams exige Suspense no Next 16, por isso o formulário fica separado.
 export default function PaginaLogin() {
   return (
-    <Suspense
-      fallback={<p className="text-muted-foreground text-sm">Carregando...</p>}
-    >
+    <Suspense fallback={<p className="text-muted-foreground text-sm">Carregando...</p>}>
       <FormularioLogin />
     </Suspense>
   );

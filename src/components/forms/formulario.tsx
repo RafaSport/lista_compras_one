@@ -19,7 +19,7 @@ export function Formulario({ erroGeral, sucesso, children, className, ...resto }
       // quem valida é o Zod, para manter a mensagem consistente
       noValidate
       className={cn(
-        "flex flex-col gap-4 border-[0.3px] border-primary/30 rounded-md p-4",
+        "border-primary/30 flex flex-col gap-4 rounded-md border-[0.3px] p-4",
         // Rolagem própria: em tela pequena o formulário não estoura a viewport.
         "overflow-y-auto overscroll-contain",
         className,

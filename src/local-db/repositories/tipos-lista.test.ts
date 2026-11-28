@@ -5,7 +5,12 @@ import "fake-indexeddb/auto";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { BancoLocal } from "../esquema";
-import { criarTipoLista, excluirTipoLista, listarTiposLista, atualizarTipoLista } from "./tipos-lista";
+import {
+  criarTipoLista,
+  excluirTipoLista,
+  listarTiposLista,
+  atualizarTipoLista,
+} from "./tipos-lista";
 
 let banco: BancoLocal;
 

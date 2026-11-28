@@ -7,11 +7,11 @@
 
 ## Visão geral
 
-| Estado | Quantidade | Descrição |
-| --- | --- | --- |
-| `[x]` Concluído | 52 | Confirmado no código com testes passando |
-| `[ ]` Pendente | 14 | Ausente no repositório ou incompleto |
-| `[?]` A verificar | 8 | Existe no código mas não foi inspecionado |
+| Estado            | Quantidade | Descrição                                 |
+| ----------------- | ---------- | ----------------------------------------- |
+| `[x]` Concluído   | 52         | Confirmado no código com testes passando  |
+| `[ ]` Pendente    | 14         | Ausente no repositório ou incompleto      |
+| `[?]` A verificar | 8          | Existe no código mas não foi inspecionado |
 
 ---
 
@@ -245,14 +245,14 @@
 
 ## 13. Divergências conhecidas
 
-| Item | Documento diz | Código faz |
-| --- | --- | --- |
-| Duração da sessão | 50 dias (RNF04) | 8 horas em `src/auth.ts` |
-| Código de convite | Obrigatório no cadastro | Removido por decisão do usuário |
-| Marcador de sessão local | Obrigatório (seção 5.2) | Não existe |
-| Tela `/pendentes` | Existe na navegação | Não existe |
-| `GET /api/sincronizacao` | Existe na arquitetura | Não existe |
-| PWA instalável | Manifest, ícones e service worker | Só SVGs padrão do Next em `public/` |
+| Item                     | Documento diz                     | Código faz                          |
+| ------------------------ | --------------------------------- | ----------------------------------- |
+| Duração da sessão        | 50 dias (RNF04)                   | 8 horas em `src/auth.ts`            |
+| Código de convite        | Obrigatório no cadastro           | Removido por decisão do usuário     |
+| Marcador de sessão local | Obrigatório (seção 5.2)           | Não existe                          |
+| Tela `/pendentes`        | Existe na navegação               | Não existe                          |
+| `GET /api/sincronizacao` | Existe na arquitetura             | Não existe                          |
+| PWA instalável           | Manifest, ícones e service worker | Só SVGs padrão do Next em `public/` |
 
 ---
 

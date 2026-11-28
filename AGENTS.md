@@ -140,3 +140,16 @@ Toda entrega termina com:
   de API para `/login` e devolvia HTML com status 200. O formulário de cadastro
   interpretava esse 200 como sucesso, exibia "usuário criado" e nada era gravado.
 - Consequência: nenhuma rota de API pode depender do proxy para autorização.
+
+## Rotas de API removidas ou renomeadas
+
+- Depois de apagar ou renomear um arquivo `route.ts`, os validadores gerados pelo
+  Next (`.next/types` e `.next/dev/types`) continuam apontando para o arquivo
+  antigo e o `tsc --noEmit` quebra com TS2307. Não é erro do código, é cache.
+- Correção:
+
+      npx next typegen
+      Remove-Item -LiteralPath '.next\dev\types' -Recurse -Force
+
+- `.next/` é gitignored. Em CI, build limpo regenera os tipos e o erro não aparece.
+  Ele só surge em ambiente local com cache antigo.

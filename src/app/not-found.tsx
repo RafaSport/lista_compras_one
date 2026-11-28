@@ -8,9 +8,7 @@ export default function NaoEncontrada() {
     <div className="bg-background flex h-full flex-col items-center justify-center gap-6 px-4">
       <IconeCarrinho size={72} className="text-primary" />
 
-      <h1 className="text-foreground text-2xl font-semibold tracking-tight">
-        Lista de Compras
-      </h1>
+      <h1 className="text-foreground text-2xl font-semibold tracking-tight">Lista de Compras</h1>
 
       <div className="flex flex-col items-center gap-1 text-center">
         <p className="text-foreground text-sm font-medium">Página não encontrada</p>

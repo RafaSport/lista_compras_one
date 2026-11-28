@@ -36,13 +36,9 @@ const rotulos: Record<CorLista, string> = {
 export function SeletorCor({ valor, aoMudar, erro }: Props) {
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="text-foreground text-sm font-medium pb-2">Cor da Lista</legend>
+      <legend className="text-foreground pb-2 text-sm font-medium">Cor da Lista</legend>
 
-      <div
-        role="radiogroup"
-        aria-label="Cor da lista"
-        className="grid grid-cols-7 gap-x-2 gap-y-2"
-      >
+      <div role="radiogroup" aria-label="Cor da lista" className="grid grid-cols-7 gap-x-2 gap-y-2">
         {coresLista.map((cor) => {
           const selecionada = valor === cor;
 
@@ -61,7 +57,7 @@ export function SeletorCor({ valor, aoMudar, erro }: Props) {
                   "size-7 rounded-full transition-all",
                   classesCor[cor],
                   selecionada
-                    ? "ring-foreground ring-2 ring-offset-2 ring-offset-background"
+                    ? "ring-foreground ring-offset-background ring-2 ring-offset-2"
                     : "opacity-70 hover:opacity-100",
                 )}
               />

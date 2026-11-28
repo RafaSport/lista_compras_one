@@ -46,9 +46,7 @@ function FormularioLista({ usuarioId }: { usuarioId: string }) {
   // Escrita sem inscrição reativa: não segura a navegação.
   const { criar, atualizar } = useEscritaTiposLista(usuarioId);
 
-  const listaAtual = editando
-    ? (tiposLista.find((item) => item.id === listaId) ?? null)
-    : null;
+  const listaAtual = editando ? (tiposLista.find((item) => item.id === listaId) ?? null) : null;
 
   const [nome, definirNome] = useState("");
   const [cor, definirCor] = useState<CorLista | null>(null);
@@ -93,9 +91,7 @@ function FormularioLista({ usuarioId }: { usuarioId: string }) {
       // replace evita deixar o formulário no histórico.
       router.replace("/listas");
     } catch (causa) {
-      definirErro(
-        causa instanceof Error ? causa.message : "Não foi possível salvar a lista.",
-      );
+      definirErro(causa instanceof Error ? causa.message : "Não foi possível salvar a lista.");
       definirSalvando(false);
     }
   }
@@ -141,12 +137,7 @@ function FormularioLista({ usuarioId }: { usuarioId: string }) {
             Cancelar
           </Botao>
         </Link>
-        <Botao
-          type="submit"
-          disabled={!podeSalvar}
-          carregando={salvando}
-          className="flex-1"
-        >
+        <Botao type="submit" disabled={!podeSalvar} carregando={salvando} className="flex-1">
           {editando ? "Salvar Alterações" : "Salvar Lista"}
         </Botao>
       </div>
