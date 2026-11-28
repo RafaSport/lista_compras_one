@@ -18,7 +18,6 @@ export default function PaginaCadastro() {
   const [senha, setSenha] = useState("");
   const [confirmacaoSenha, setConfirmacaoSenha] = useState("");
   const [erro, setErro] = useState<string | null>(null);
-  const [sucesso, setSucesso] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
 
   // Erros por campo, preenchidos pela validação do Zod.
@@ -33,7 +32,6 @@ export default function PaginaCadastro() {
   async function cadastrar(evento: React.FormEvent) {
     evento.preventDefault();
     setErro(null);
-    setSucesso(null);
     setErros({});
 
     const dados = { nome, sobrenome, senha, confirmacaoSenha };
@@ -66,6 +64,14 @@ export default function PaginaCadastro() {
 
     setEnviando(false);
 
+    // A rota devolve JSON. Se vier HTML, algo interceptou a requisição
+    // (proxy, 404 ou página de erro) e não houve cadastro.
+    const tipo = resposta.headers.get("content-type") ?? "";
+    if (!tipo.includes("application/json")) {
+      setErro("Não foi possível criar o usuário. Tente novamente.");
+      return;
+    }
+
     if (resposta.status === 409) {
       setErro("Esse login já existe. Informe um sobrenome diferente.");
       return;
@@ -80,15 +86,13 @@ export default function PaginaCadastro() {
     setSobrenome("");
     setSenha("");
     setConfirmacaoSenha("");
-    setSucesso("Usuário criado com sucesso. Redirecionando para o login...");
 
-    setTimeout(() => {
-      router.push("/login");
-    }, 2500);
+    // Navega imediatamente com o aviso na URL: não fica preso na tela.
+    router.replace("/login?cadastro=ok");
   }
 
   return (
-    <Formulario onSubmit={cadastrar} erroGeral={erro} sucesso={sucesso}>
+    <Formulario onSubmit={cadastrar} erroGeral={erro}>
       <Campo
         rotulo="Nome"
         placeholder="Ex.: Rafael"

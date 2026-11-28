@@ -43,6 +43,8 @@ export default async function proxy(requisicao: NextRequest, evento: NextFetchEv
 
 export const config = {
   matcher: [
-    "/((?!api/auth|_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|icons).*)",
+    // Exclui as rotas de API: elas fazem a própria autorização no Route Handler.
+    // Sem isso, o proxy redireciona POSTs para /login e devolve HTML em vez de JSON.
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|icons).*)",
   ],
 };

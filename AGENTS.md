@@ -104,6 +104,10 @@ Estas quebram o sistema se violadas. Não negocie, não "melhore".
 - Prisma 7: `prisma migrate` cria as tabelas mas NÃO gera o client. Depois de
   qualquer mudança no schema, rode `npx prisma generate` antes do tsc. Sem isso,
   o import de PrismaClient falha com "não tem nenhum membro exportado".
+- O proxy (src/proxy.ts) NÃO intercepta /api/*. O matcher exclui `api` inteiro.
+  Cada Route Handler valida a sessão sozinho via usuarioAtual() (src/server/sessao.ts).
+  Motivo: o proxy redirecionava POSTs de API para /login, devolvendo HTML com
+  status 200 e mascarando falhas como sucesso.
 
 ## Verificação obrigatória
 
@@ -126,3 +130,13 @@ Toda entrega termina com:
 3. O que foi implementado, por requisito (cite RF/RN).
 4. Comandos executados e resultado real de cada um.
 5. Pendências e decisões que precisam do dono.
+
+## Proxy e rotas de API
+
+- O proxy (`src/proxy.ts`) NÃO intercepta `/api/*`. O matcher exclui `api` inteiro.
+- Cada Route Handler valida a sessão por conta própria via `usuarioAtual()`
+  (`src/server/sessao.ts`), devolvendo 401 quando não há sessão.
+- Motivo: quando o matcher excluía apenas `api/auth`, o proxy redirecionava POSTs
+  de API para `/login` e devolvia HTML com status 200. O formulário de cadastro
+  interpretava esse 200 como sucesso, exibia "usuário criado" e nada era gravado.
+- Consequência: nenhuma rota de API pode depender do proxy para autorização.

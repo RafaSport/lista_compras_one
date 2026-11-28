@@ -217,7 +217,7 @@
 
 ## 11. Qualidade e infraestrutura
 
-- [x] 171 testes passando em 32 arquivos
+- [x] 174 testes passando em 33 arquivos
 - [x] `tsc --noEmit` limpo
 - [x] ESLint sem erros (2 warnings de import não usado em `src/app/(protegido)/layout.tsx`)
 - [x] Alias `server-only` no `vitest.config.mts`

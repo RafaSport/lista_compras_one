@@ -1,19 +1,9 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/server/prisma";
 import { cadastroSchema } from "@/schemas/senha";
-
-// Gera o login no formato nome.sobrenome, sem acentos e em minúsculas (RN12).
-function gerarLogin(nome: string, sobrenome: string) {
-  const limpar = (texto: string) =>
-    texto
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, "");
-
-  return `${limpar(nome)}.${limpar(sobrenome)}`;
-}
+import { gerarLogin } from "@/domain/gerar-login";
 
 // Cria um usuário. Rota pública (RF21).
 export async function POST(requisicao: Request) {
@@ -29,7 +19,10 @@ export async function POST(requisicao: Request) {
   const login = gerarLogin(nome, sobrenome);
 
   if (!login || login === ".") {
-    return NextResponse.json({ erro: "Informe nome e sobrenome válidos." }, { status: 400 });
+    return NextResponse.json(
+      { erro: "Informe nome e sobrenome válidos." },
+      { status: 400 },
+    );
   }
 
   const existente = await prisma.usuario.findUnique({ where: { login } });
@@ -44,10 +37,21 @@ export async function POST(requisicao: Request) {
     await prisma.usuario.create({
       data: { nome, sobrenome, login, senhaHash },
     });
-  } catch {
-    // Corrida: duas requisições com o mesmo login passaram pela consulta prévia.
-    // O índice único do banco decide quem ganha.
-    return NextResponse.json({ erro: "Login já existe.", login }, { status: 409 });
+  } catch (erro) {
+    // Só violação de unicidade é 409. Qualquer outro erro é falha do servidor
+    // e precisa aparecer no log, em vez de virar "login já existe".
+    if (
+      erro instanceof Prisma.PrismaClientKnownRequestError &&
+      erro.code === "P2002"
+    ) {
+      return NextResponse.json({ erro: "Login já existe.", login }, { status: 409 });
+    }
+
+    console.error("Falha ao criar usuário:", erro);
+    return NextResponse.json(
+      { erro: "Não foi possível criar o usuário." },
+      { status: 500 },
+    );
   }
 
   return NextResponse.json({ login }, { status: 201 });
