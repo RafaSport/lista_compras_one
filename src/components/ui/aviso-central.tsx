@@ -10,13 +10,14 @@ type Props = {
   duracaoMs?: number;
 };
 
-// Aviso central e transitório. Cobre a tela com o formulário ao fundo,
-// fica visível por alguns segundos e desaparece sozinho.
-// Sem botão de fechar: o usuário não precisa agir para se livrar do aviso.
 export function AvisoCentral({ mensagem, aoFechar, duracaoMs = 3000 }: Props) {
-  // O callback fica em ref para o efeito não depender da identidade da função.
   const aoFecharRef = useRef(aoFechar);
-  aoFecharRef.current = aoFechar;
+
+  // Guarda o callback mais recente. A escrita vai dentro de um efeito porque
+  // o render precisa ser puro: escrever em ref durante o render é proibido.
+  useEffect(() => {
+    aoFecharRef.current = aoFechar;
+  }, [aoFechar]);
 
   useEffect(() => {
     if (!mensagem) return;
