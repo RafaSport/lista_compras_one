@@ -11,7 +11,7 @@ type Props = FormHTMLAttributes<HTMLFormElement> & {
 };
 
 // Casca de formulário: trata o envio, exibe erro geral e mensagem de sucesso.
-// Os campos chegam como children, então o mesmo componente serve a qualquer form.
+// Sem rolagem própria: quem rola, se necessário, é a casca da página.
 export function Formulario({ erroGeral, sucesso, children, className, ...resto }: Props) {
   return (
     <form
@@ -19,9 +19,9 @@ export function Formulario({ erroGeral, sucesso, children, className, ...resto }
       // quem valida é o Zod, para manter a mensagem consistente
       noValidate
       className={cn(
-        "border-primary/30 flex flex-col gap-4 rounded-md border-[0.3px] p-4",
-        // Rolagem própria: em tela pequena o formulário não estoura a viewport.
-        "overflow-y-auto overscroll-contain",
+        "border-primary/30 flex flex-col gap-3 rounded-md border-[0.3px] p-3",
+        // Em telas baixas o espaçamento encolhe antes de qualquer rolagem aparecer
+        "[@media(max-height:600px)]:gap-2 [@media(max-height:600px)]:p-2",
         className,
       )}
       {...resto}

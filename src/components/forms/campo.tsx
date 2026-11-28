@@ -15,8 +15,6 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
   tipo?: "text" | "password" | "email" | "number" | "tel" | "search" | "url";
 };
 
-// Campo de entrada completo: rótulo, input, dica e mensagem de erro.
-// Campos do tipo password ganham um botão de olho para mostrar/ocultar.
 export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
   { rotulo, erro, dica, obrigatorio, tipo = "text", id, className, ...resto },
   ref,
@@ -35,11 +33,10 @@ export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
   const descritoPor = [erro ? idErro : null, dica ? idDica : null].filter(Boolean).join(" ");
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-1">
       <Rotulo htmlFor={idCampo} obrigatorio={obrigatorio}>
         {rotulo}
       </Rotulo>
-
       {/* Envolve o input para posicionar o botão do olho dentro do campo */}
       <div className="relative">
         <input
@@ -50,6 +47,7 @@ export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
           aria-describedby={descritoPor || undefined}
           className={cn(
             "bg-background text-foreground h-10 w-full rounded-lg border px-3 text-sm",
+            "[@media(max-height:600px)]:h-9",
             "placeholder:text-muted-foreground",
             "focus-visible:outline-ring transition-colors focus-visible:outline-2 focus-visible:outline-offset-2",
             "disabled:cursor-not-allowed disabled:opacity-60",
@@ -60,7 +58,6 @@ export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
           )}
           {...resto}
         />
-
         {/* Botão de mostrar/ocultar senha. Só aparece em campos de senha. */}
         {ehSenha && (
           <button
@@ -106,13 +103,11 @@ export const Campo = forwardRef<HTMLInputElement, Props>(function Campo(
           </button>
         )}
       </div>
-
       {dica && !erro && (
         <p id={idDica} className="text-muted-foreground text-xs">
           {dica}
         </p>
       )}
-
       {erro && (
         <span id={idErro}>
           <Mensagem variante="erro" className="px-2 py-1 text-xs">

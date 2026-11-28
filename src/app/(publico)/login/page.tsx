@@ -2,6 +2,7 @@
 
 import { Campo } from "@/components/forms/campo";
 import { Formulario } from "@/components/forms/formulario";
+import { CabecalhoPublico } from "@/components/navegacao/cabecalho-publico";
 import { Botao } from "@/components/ui/botao";
 import { LinkTexto } from "@/components/ui/link-texto";
 import { signIn } from "next-auth/react";
@@ -55,36 +56,40 @@ function FormularioLogin() {
   }
 
   return (
-    <Formulario
-      onSubmit={entrar}
-      erroGeral={erro}
-      sucesso={erro ? null : cadastroOk ? "Usuário criado. Faça login." : null}
-      autoComplete="off"
-    >
-      <Campo
-        rotulo="Usuário"
-        autoComplete="username"
-        value={usuario}
-        onChange={(e) => setUsuario(e.target.value)}
-        required
-      />
+    <div className="flex flex-col">
+      <CabecalhoPublico subtitulo="Entre para continuar" />
 
-      <Campo
-        rotulo="Senha"
-        tipo="password"
-        autoComplete="current-password"
-        value={senha}
-        onChange={(e) => setSenha(e.target.value)}
-        required
-      />
+      <Formulario
+        onSubmit={entrar}
+        erroGeral={erro}
+        sucesso={erro ? null : cadastroOk ? "Usuário criado. Faça login." : null}
+        autoComplete="off"
+      >
+        <Campo
+          rotulo="Usuário"
+          autoComplete="username"
+          value={usuario}
+          onChange={(e) => setUsuario(e.target.value)}
+          required
+        />
 
-      <Botao type="submit" carregando={enviando} className="w-full">
-        Entrar
-      </Botao>
+        <Campo
+          rotulo="Senha"
+          tipo="password"
+          autoComplete="current-password"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+        />
 
-      <p className="text-muted-foreground text-center text-sm">
-        Ainda não tem conta? <LinkTexto href="/cadastro">Criar usuário</LinkTexto>
-      </p>
-    </Formulario>
+        <Botao type="submit" carregando={enviando} className="w-full">
+          Entrar
+        </Botao>
+
+        <p className="text-muted-foreground text-center text-sm">
+          Ainda não tem conta? <LinkTexto href="/cadastro">Criar usuário</LinkTexto>
+        </p>
+      </Formulario>
+    </div>
   );
 }
